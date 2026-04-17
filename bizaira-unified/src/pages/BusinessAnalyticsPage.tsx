@@ -33,6 +33,8 @@ const BusinessAnalyticsPage = () => {
 
   const [question, setQuestion] = useState("");
   const [aiAnswer, setAiAnswer] = useState("");
+  const [analysisResult, setAnalysisResult] = useState("");
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isAsking, setIsAsking] = useState(false);
   const [activeTab, setActiveTab] = useState<"overview" | "monthly" | "ask">("overview");
 
@@ -56,10 +58,40 @@ const BusinessAnalyticsPage = () => {
     };
   });
 
-  const handleStartAnalysis = () => {
-    if (revenue > 0) {
+  const handleStartAnalysis = async () => {
+    if (revenue <= 0) return;
+    setIsAnalyzing(true);
+    try {
+      const answer = await generateAnalytics({
+        revenue,
+        expenses,
+        clients,
+        feeling,
+        tooMuchTime,
+        wantToImprove,
+        question: "",
+        language: isHe ? "hebrew" : "english",
+      });
+      setAnalysisResult(answer);
       saveEntry({ revenue, profit, clients, profitMargin });
+      if (answer && !answer.startsWith("לא הצלחתי")) {
+        saveCreation({
+          type: "analytics",
+          title: isHe ? "ניתוח עסקי" : "Business Analytics",
+          content: isHe
+            ? `ניתוח עסקי ראשוני:\n${answer}`
+            : `Initial business analysis:\n${answer}`,
+          metadata: { revenue, expenses, clients, profitMargin },
+        });
+      }
       setDataEntered(true);
+    } catch (err: any) {
+      console.error("Analytics generation failed:", err?.message || err);
+      setAnalysisResult(isHe
+        ? "לא הצלחתי לייצר ניתוח עסקי. נסה שוב מאוחר יותר."
+        : "Could not generate the business analysis. Please try again later.");
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
@@ -189,8 +221,8 @@ const BusinessAnalyticsPage = () => {
               </div>
             </div>
 
-            <button onClick={handleStartAnalysis} disabled={!monthlyRevenue} className="w-full gradient-glow glow-shadow text-primary-foreground font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-all disabled:opacity-50">
-              <Sparkles size={18} />{isHe ? "נתח את העסק שלי" : "Analyze My Business"}
+            <button onClick={handleStartAnalysis} disabled={!monthlyRevenue || isAnalyzing} className="w-full gradient-glow glow-shadow text-primary-foreground font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-all disabled:opacity-50">
+              {isAnalyzing ? <><Loader2 size={18} className="animate-spin" />{isHe ? "מנתח את העסק..." : "Analyzing business..."}</> : <><Sparkles size={18} />{isHe ? "נתח את העסק שלי" : "Analyze My Business"}</>}
             </button>
           </div>
         ) : (
@@ -267,6 +299,12 @@ const BusinessAnalyticsPage = () => {
                 <button onClick={() => setDataEntered(false)} className="w-full glass-card py-2.5 rounded-xl text-xs font-bold text-muted-foreground hover:text-foreground flex items-center justify-center gap-1.5 transition-all">
                   <FileText size={14} />{isHe ? "ערוך נתונים" : "Edit Data"}
                 </button>
+              </div>
+            )}
+            {analysisResult && (
+              <div className="glass-card rounded-xl p-4 bg-background/70 border border-border/30 animate-fade-in-up">
+                <div className="flex items-center gap-2 mb-3"><SparkleIcon size={14} className="text-primary" /><span className="text-sm font-bold text-foreground">{isHe ? "תובנות AI" : "AI Insights"}</span></div>
+                <div className="whitespace-pre-wrap text-sm text-foreground leading-relaxed">{analysisResult}</div>
               </div>
             )}
 

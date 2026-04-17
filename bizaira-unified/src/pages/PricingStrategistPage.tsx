@@ -24,6 +24,7 @@ const PricingStrategistPage = () => {
   const [calculated, setCalculated] = useState(false);
   const [isSimulating, setIsSimulating] = useState(false);
   const [simResult, setSimResult] = useState("");
+  const [pricingAdvice, setPricingAdvice] = useState("");
 
   const duration = Number(serviceDuration) || 60;
   const material = Number(materialCost) || 0;
@@ -51,6 +52,7 @@ const PricingStrategistPage = () => {
         language: isHe ? "hebrew" : "english",
       });
       setSimResult(result);
+      setPricingAdvice(result);
       if (result && !result.startsWith("העלאת")) {
         saveCreation({
           type: "pricing",
@@ -62,7 +64,9 @@ const PricingStrategistPage = () => {
         });
       }
     } catch {
-      setSimResult(isHe ? "העלאת מחיר ב-10% מומלצת. הורדה ב-15% לא כדאית." : "10% increase recommended. 15% decrease not advisable.");
+      const fallbackText = isHe ? "העלאת מחיר ב-10% מומלצת. הורדה ב-15% לא כדאית." : "10% increase recommended. 15% decrease not advisable.";
+      setSimResult(fallbackText);
+      setPricingAdvice(fallbackText);
     } finally {
       setIsSimulating(false);
     }
@@ -169,7 +173,17 @@ const PricingStrategistPage = () => {
               {isSimulating ? <><Loader2 size={16} className="animate-spin" />{isHe ? "מריץ סימולציה..." : "Running..."}</> : <><Sparkles size={16} className="text-primary" />{isHe ? "הרץ סימולציית AI" : "Run AI Simulation"}</>}
             </button>
 
-            {simResult && (
+            {pricingAdvice && (
+              <div className="glass-card rounded-xl p-4 animate-fade-in-up">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-6 h-6 rounded-lg gradient-glow flex items-center justify-center"><Sparkles size={12} className="text-primary-foreground" /></div>
+                  <span className="text-sm font-bold text-foreground">{isHe ? "ייעוץ תמחור AI" : "AI Pricing Advice"}</span>
+                </div>
+                <div className="bg-background/40 rounded-lg p-4 text-sm text-foreground leading-relaxed whitespace-pre-wrap border border-border/30">{pricingAdvice}</div>
+              </div>
+            )}
+
+            {simResult && !pricingAdvice && (
               <div className="glass-card rounded-xl p-4 animate-fade-in-up">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-6 h-6 rounded-lg gradient-glow flex items-center justify-center"><Sparkles size={12} className="text-primary-foreground" /></div>
