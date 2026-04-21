@@ -74,8 +74,8 @@ const PricingStrategistPage = () => {
 
   const handleDownload = () => {
     const content = isHe
-      ? `דוח תמחור - BizAIra\n${"=".repeat(30)}\n\nמשך שירות: ${duration} דקות\nעלות חומרים: ₪${material}\nזמן הכנה: ${prep} דקות\nהוצאות קבועות: ₪${fixed}/חודש\nרווח רצוי: ${profitPct}%\n\nמחיר מינימלי: ₪${minPrice}\nמחיר מומלץ: ₪${recommendedPrice}\nמחיר פרימיום: ₪${premiumPrice}\nערך שעתי: ₪${hourlyValue}/שעה\n\n${simResult ? `סימולציה:\n${simResult}` : ""}`
-      : `Pricing Report - BizAIra\n${"=".repeat(30)}\n\nDuration: ${duration}min\nMaterials: ₪${material}\nPrep: ${prep}min\nFixed: ₪${fixed}/mo\nDesired Profit: ${profitPct}%\n\nMin Price: ₪${minPrice}\nRecommended: ₪${recommendedPrice}\nPremium: ₪${premiumPrice}\nHourly: ₪${hourlyValue}/hr\n\n${simResult ? `Simulation:\n${simResult}` : ""}`;
+      ? `דוח תמחור - BizAIra\n${"=".repeat(30)}\n\nמשך שירות: ${duration} דקות\nעלות חומרים: ₪${material}\nזמן הכנה: ${prep} דקות\nרמת מאמץ: ${difficulty === "easy" ? "קל" : difficulty === "medium" ? "בינוני" : "קשה"}\n\nמחיר מינימלי: ₪${minPrice}\nמחיר מומלץ: ₪${recommendedPrice}\nמחיר פרימיום: ₪${premiumPrice}\nערך שעתי: ₪${hourlyValue}/שעה\n\n${simResult ? `סימולציה:\n${simResult}` : ""}`
+      : `Pricing Report - BizAIra\n${"=".repeat(30)}\n\nDuration: ${duration}min\nMaterials: ₪${material}\nPrep: ${prep}min\nDifficulty: ${difficulty}\n\nMin Price: ₪${minPrice}\nRecommended: ₪${recommendedPrice}\nPremium: ₪${premiumPrice}\nHourly: ₪${hourlyValue}/hr\n\n${simResult ? `Simulation:\n${simResult}` : ""}`;
     const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");

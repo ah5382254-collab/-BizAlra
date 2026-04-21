@@ -28,7 +28,7 @@ const HomePage = () => {
         <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-5 tracking-tight">
           <span className="text-foreground">{t("home.hero.title1")}</span>
           <br />
-          <span className="gradient-glow-text">{t("home.hero.title2")}</span>
+          <span className="text-primary font-bold">{t("home.hero.title2")}</span>
         </h1>
         <p className="text-muted-foreground text-base md:text-lg leading-relaxed max-w-md mx-auto mb-9">
           {t("home.hero.desc")}

@@ -1,11 +1,12 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { Link } from "react-router-dom";
 import { useI18n } from "@/lib/i18n";
 import {
   Plus, Check, Clock, Star, StarOff, ChevronLeft, ChevronRight,
   Trash2, X, CalendarDays, Bell, BellOff, CalendarClock, Edit3,
   SkipForward, CheckCircle2, Circle, AlertCircle,
 } from "lucide-react";
-import { format, addDays, isSameDay, startOfWeek, parseISO, isToday, isPast } from "date-fns";
+import { format, addDays, isSameDay, startOfWeek, parseISO, isToday, isPast, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, subMonths } from "date-fns";
 import { he, enUS } from "date-fns/locale";
 
 const STORAGE_KEY = "bizaira_tasks_v2";
@@ -293,13 +294,18 @@ const JournalPage = () => {
       {/* Top Header */}
       <div className="sticky top-0 z-20 bg-background/90 backdrop-blur-md border-b border-border/50 px-4 pt-5 pb-3">
         <div className="flex items-center justify-between mb-3">
-          <div>
-            <h1 className="text-lg font-bold text-foreground">
-              {isHe ? "ניהול משימות" : "Task Manager"}
-            </h1>
-            <p className="text-xs text-muted-foreground">
-              {isHe ? "מה יש לי לעשות היום" : "What do I need to do today"}
-            </p>
+          <div className="flex items-center gap-3">
+            <Link to="/create" className="glass-card p-2 rounded-lg hover:scale-105 transition-all">
+              <ChevronLeft size={18} className="text-foreground" />
+            </Link>
+            <div>
+              <h1 className="text-lg font-bold text-foreground">
+                {isHe ? "יומן עסקי" : "Business Journal"}
+              </h1>
+              <p className="text-xs text-muted-foreground">
+                {isHe ? "ניהול משימות ותכנון" : "Task management and planning"}
+              </p>
+            </div>
           </div>
           <div className="flex items-center gap-2">
             {!notifGranted && (
@@ -328,7 +334,7 @@ const JournalPage = () => {
 
         {/* View Toggle */}
         <div className="flex gap-2">
-          {(["day", "week"] as View[]).map(v => (
+          {(["day", "week", "month"] as View[]).map(v => (
             <button
               key={v}
               onClick={() => setView(v)}
@@ -338,8 +344,8 @@ const JournalPage = () => {
                   : "bg-muted/60 text-muted-foreground hover:bg-muted"
               }`}
             >
-              {v === "day" ? <CalendarDays size={13} /> : <CalendarClock size={13} />}
-              {v === "day" ? (isHe ? "יומי" : "Daily") : (isHe ? "שבועי" : "Weekly")}
+              {v === "day" ? <CalendarDays size={13} /> : v === "week" ? <CalendarClock size={13} /> : <CalendarDays size={13} />}
+              {v === "day" ? (isHe ? "יומי" : "Daily") : v === "week" ? (isHe ? "שבועי" : "Weekly") : (isHe ? "חודשי" : "Monthly")}
             </button>
           ))}
         </div>
@@ -392,7 +398,7 @@ const JournalPage = () => {
           {/* Important tasks */}
           {importantPending.length > 0 && (
             <div>
-              <SectionHeader title={isHe ? "⭐ משימות חשובות" : "⭐ Important Tasks"} count={importantPending.length} />
+              <SectionHeader title={isHe ? "משימות חשובות" : "Important Tasks"} count={importantPending.length} />
               <div className="space-y-2">
                 {importantPending.map(t => <TaskCard key={t.id} task={t} />)}
               </div>
@@ -402,7 +408,7 @@ const JournalPage = () => {
           {/* Meetings sorted by time */}
           {meetingsSorted.length > 0 && (
             <div>
-              <SectionHeader title={isHe ? "🗓 פגישות" : "🗓 Meetings"} count={meetingsSorted.length} />
+              <SectionHeader title={isHe ? "פגישות" : "Meetings"} count={meetingsSorted.length} />
               <div className="space-y-2">
                 {meetingsSorted.map(t => <TaskCard key={t.id} task={t} />)}
               </div>
@@ -412,7 +418,7 @@ const JournalPage = () => {
           {/* Regular tasks */}
           {regularTasks.length > 0 && (
             <div>
-              <SectionHeader title={isHe ? "📋 משימות" : "📋 Tasks"} count={regularTasks.length} />
+              <SectionHeader title={isHe ? "משימות" : "Tasks"} count={regularTasks.length} />
               <div className="space-y-2">
                 {regularTasks.map(t => <TaskCard key={t.id} task={t} />)}
               </div>
@@ -422,7 +428,7 @@ const JournalPage = () => {
           {/* Completed */}
           {doneTasks.length > 0 && (
             <div>
-              <SectionHeader title={isHe ? "✅ הושלמו" : "✅ Completed"} />
+              <SectionHeader title={isHe ? "הושלמו" : "Completed"} />
               <div className="space-y-2">
                 {doneTasks.map(t => <TaskCard key={t.id} task={t} />)}
               </div>
@@ -571,6 +577,89 @@ const JournalPage = () => {
                     </p>
                   )}
                 </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* MONTHLY VIEW */}
+      {view === "month" && (
+        <div className="px-4 pt-4 space-y-4">
+          {/* Month Navigator */}
+          <div className="flex items-center justify-between">
+            <button
+              onClick={() => setCurrentDate(d => subMonths(d, 1))}
+              className="p-2 rounded-xl hover:bg-muted transition-all"
+            >
+              {isHe ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+            </button>
+            <p className="text-sm font-bold text-foreground">
+              {format(currentDate, "MMMM yyyy", { locale })}
+            </p>
+            <button
+              onClick={() => setCurrentDate(d => addMonths(d, 1))}
+              className="p-2 rounded-xl hover:bg-muted transition-all"
+            >
+              {isHe ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
+            </button>
+          </div>
+
+          {/* Back to today */}
+          {!isSameDay(currentDate, new Date()) && (
+            <button
+              onClick={goToday}
+              className="w-full text-xs text-primary font-semibold bg-primary/5 hover:bg-primary/10 py-2 rounded-xl transition-all"
+            >
+              {isHe ? "← חזור לחודש הנוכחי" : "← Back to This Month"}
+            </button>
+          )}
+
+          {/* Month Grid */}
+          <div className="grid grid-cols-7 gap-1">
+            {/* Day headers */}
+            {Array.from({ length: 7 }, (_, i) => {
+              const day = addDays(startOfWeek(new Date(), { weekStartsOn: 0 }), i);
+              return (
+                <div key={i} className="p-2 text-center">
+                  <p className="text-xs font-bold text-muted-foreground uppercase">
+                    {format(day, "EEE", { locale })}
+                  </p>
+                </div>
+              );
+            })}
+
+            {/* Days */}
+            {eachDayOfInterval({
+              start: startOfWeek(startOfMonth(currentDate), { weekStartsOn: 0 }),
+              end: endOfMonth(currentDate)
+            }).map(day => {
+              const dayTasks = tasks.filter(t => t.date === format(day, "yyyy-MM-dd"));
+              const hasTasks = dayTasks.length > 0;
+              const isCurrentMonth = day.getMonth() === currentDate.getMonth();
+              const isToday = isSameDay(day, new Date());
+
+              return (
+                <button
+                  key={day.toISOString()}
+                  onClick={() => { setCurrentDate(day); setView("day"); }}
+                  className={`aspect-square p-1 text-center rounded-xl transition-all ${
+                    isCurrentMonth
+                      ? isToday
+                        ? "gradient-glow text-primary-foreground"
+                        : hasTasks
+                          ? "bg-primary/10 text-primary hover:bg-primary/20"
+                          : "hover:bg-muted text-foreground"
+                      : "text-muted-foreground/30"
+                  }`}
+                >
+                  <div className="text-sm font-semibold">{format(day, "d")}</div>
+                  {hasTasks && (
+                    <div className="flex justify-center mt-0.5">
+                      <div className="w-1 h-1 bg-primary rounded-full"></div>
+                    </div>
+                  )}
+                </button>
               );
             })}
           </div>

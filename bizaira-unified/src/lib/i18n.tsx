@@ -16,7 +16,7 @@ const translations: Translations = {
 
   // Home
   "home.hero.title1": { he: "ה-AI שיוצר לעסק שלך", en: "AI That Creates For Your Business" },
-  "home.hero.title2": { he: "הכול במקום אחד", en: "Everything In One Place" },
+  "home.hero.title2": { he: "השותף העסקי שלך", en: "Everything In One Place" },
   "home.hero.desc": { he: "יצירת תמונות מוצר, תוכן שיווקי, ניתוח עסקי ועוד — בתוך כמה שניות בלבד בעזרת AI.", en: "Create product photos, marketing content, business analytics and more — in just seconds with AI." },
   "home.slide1.title": { he: "תוכן שיווקי חכם", en: "Smart Marketing Content" },
   "home.slide1.desc": { he: "צרו הודעות שיווקיות מקצועיות, תמונות מוצר ותוכן לרשתות — הכול אוטומטי עם AI.", en: "Create professional marketing messages, product photos and social content — all automated with AI." },
@@ -45,8 +45,6 @@ const translations: Translations = {
   "tool.time.desc": { he: "אופטימיזציה חכמה", en: "Smart optimization" },
   "tool.pricing.title": { he: "תמחור חכם", en: "Smart Pricing" },
   "tool.pricing.desc": { he: "אסטרטגיית מחירים", en: "Pricing strategy" },
-  "tool.presentation.title": { he: "סטודיו מצגות", en: "Presentation Studio" },
-  "tool.presentation.desc": { he: "מצגות עסקיות מקצועיות", en: "Professional business presentations" },
   "tool.studio.title": { he: "סטודיו תמונות", en: "Photo Studio" },
   "tool.studio.desc": { he: "תמונות מוצר, לוגו, פרופיל עסקי וסטורי", en: "Product photos, logos, profiles & stories" },
 

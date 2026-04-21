@@ -18,16 +18,14 @@ const TimeOptimizerPage = () => {
 
   const [weeklyHours, setWeeklyHours] = useState("");
   const [salary, setSalary] = useState("");
-  const [servicesList, setServicesList] = useState("");
+  const [selectedActivity, setSelectedActivity] = useState("");
+  const [otherActivity, setOtherActivity] = useState("");
   const [dataEntered, setDataEntered] = useState(false);
 
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [optimizeResult, setOptimizeResult] = useState("");
 
-  const hours = Number(weeklyHours) || 0;
-  const salaryNum = Number(salary) || 0;
-  const hourlyValue = hours > 0 ? Math.round(salaryNum / hours / 4) : 0;
-  const burnout = hours > 45 ? 90 : hours > 35 ? 72 : hours > 25 ? 50 : 30;
+  const servicesText = selectedActivity === "אחר" ? otherActivity : selectedActivity;
 
   const proFeatures = [t("time.proLoadForecast"), t("time.proServiceSim"), t("time.proProfitDay"), t("time.proPricingRec")];
 
@@ -46,7 +44,7 @@ const TimeOptimizerPage = () => {
       const result = await generateTimePlan({
         weeklyHours: hours,
         monthlyIncome: salaryNum,
-        services: servicesList,
+        services: servicesText,
         language: isHe ? "hebrew" : "english",
       });
       setOptimizeResult(result);
@@ -55,8 +53,8 @@ const TimeOptimizerPage = () => {
           type: "time",
           title: isHe ? "ניהול זמן שבועי" : "Weekly Time Plan",
           content: isHe
-            ? `שעות עבודה: ${hours}/שבוע | הכנסה: ₪${salaryNum.toLocaleString()}\n\n${result}`
-            : `Work hours: ${hours}/week | Income: ₪${salaryNum.toLocaleString()}\n\n${result}`,
+            ? `שעות עבודה: ${hours}/שבוע | הכנסה: ₪${salaryNum.toLocaleString()}\nפעילות: ${servicesText}\n\n${result}`
+            : `Work hours: ${hours}/week | Income: ₪${salaryNum.toLocaleString()}\nActivity: ${servicesText}\n\n${result}`,
           metadata: { hours, salary: salaryNum, burnout },
         });
       }
@@ -70,8 +68,8 @@ const TimeOptimizerPage = () => {
 
   const handleDownload = () => {
     const content = isHe
-      ? `דוח ניהול זמן - BizAIra\n${"=".repeat(30)}\n\nשעות עבודה שבועיות: ${hours}\nהכנסה חודשית: ₪${salaryNum.toLocaleString()}\nערך שעתי: ₪${hourlyValue}\nמדד שחיקה: ${burnout}%\nשירותים: ${servicesList || "כללי"}\n\n${optimizeResult ? `המלצת AI:\n${optimizeResult}` : ""}`
-      : `Time Management Report - BizAIra\n${"=".repeat(30)}\n\nWeekly Hours: ${hours}\nMonthly Income: ₪${salaryNum.toLocaleString()}\nHourly Value: ₪${hourlyValue}\nBurnout Index: ${burnout}%\nServices: ${servicesList || "general"}\n\n${optimizeResult ? `AI Recommendation:\n${optimizeResult}` : ""}`;
+      ? `דוח ניהול זמן - BizAIra\n${"=".repeat(30)}\n\nשעות עבודה שבועיות: ${hours}\nהכנסה חודשית: ₪${salaryNum.toLocaleString()}\nערך שעתי: ₪${hourlyValue}\nמדד שחיקה: ${burnout}%\nפעילות: ${servicesText || "כללי"}\n\n${optimizeResult ? `המלצת AI:\n${optimizeResult}` : ""}`
+      : `Time Management Report - BizAIra\n${"=".repeat(30)}\n\nWeekly Hours: ${hours}\nMonthly Income: ₪${salaryNum.toLocaleString()}\nHourly Value: ₪${hourlyValue}\nBurnout Index: ${burnout}%\nActivity: ${servicesText || "general"}\n\n${optimizeResult ? `AI Recommendation:\n${optimizeResult}` : ""}`;
     const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -136,7 +134,18 @@ const TimeOptimizerPage = () => {
               </div>
               <div>
                 <label className="text-xs font-semibold text-foreground mb-1.5 flex items-center gap-1"><Calendar size={12} />{isHe ? "סוגי שירותים / פעילויות" : "Services / Activities"}</label>
-                <textarea value={servicesList} onChange={e => setServicesList(e.target.value)} placeholder={isHe ? "לדוגמה: ייעוץ, עיצוב, שיווק..." : "e.g. Consulting, Design, Marketing..."} rows={3} className="w-full bg-background/50 border border-border/50 rounded-lg px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground resize-none focus:outline-none focus:ring-2 focus:ring-ring/50" />
+                <select value={selectedActivity} onChange={e => setSelectedActivity(e.target.value)} className="w-full bg-background/50 border border-border/50 rounded-lg px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/50">
+                  <option value="">{isHe ? "בחר פעילות..." : "Select activity..."}</option>
+                  <option value="ייעוץ">{isHe ? "ייעוץ" : "Consulting"}</option>
+                  <option value="עיצוב">{isHe ? "עיצוב" : "Design"}</option>
+                  <option value="שיווק">{isHe ? "שיווק" : "Marketing"}</option>
+                  <option value="פיתוח">{isHe ? "פיתוח" : "Development"}</option>
+                  <option value="מכירות">{isHe ? "מכירות" : "Sales"}</option>
+                  <option value="אחר">{isHe ? "אחר" : "Other"}</option>
+                </select>
+                {selectedActivity === "אחר" && (
+                  <input value={otherActivity} onChange={e => setOtherActivity(e.target.value)} placeholder={isHe ? "ציין פעילות אחרת..." : "Specify other activity..."} className="w-full mt-2 bg-background/50 border border-border/50 rounded-lg px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/50" />
+                )}
               </div>
               <button onClick={handleStartAnalysis} disabled={!weeklyHours} className="w-full gradient-glow glow-shadow text-primary-foreground font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-all disabled:opacity-50">
                 <Sparkles size={18} />{isHe ? "נתח את הזמן שלי" : "Analyze My Time"}
