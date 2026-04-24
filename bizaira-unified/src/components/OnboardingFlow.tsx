@@ -162,12 +162,12 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
             </div>
 
             <h1 className="text-4xl font-bold mb-3" style={{ color: NAVY, fontFamily: "'Playfair Display', serif" }}>
-              {isHe ? "חווה את עתיד העסק שלך." : "Experience the future of your business."}
+              {isHe ? "חווה את עתיד העסק שלך" : "Experience the future of your business"}
             </h1>
             <p className="text-lg font-semibold mb-10" style={{ color: NAVY, fontFamily: "'Montserrat', sans-serif" }}>
               {isHe
-                ? "הכנו 4 שאלות קצרות כדי להתאים חוויה בלעדית, פרימיום ומותאמת למותג שלך. זה לוקח רק רגע."
-                : "We have prepared 4 brief questions to tailor a bespoke, premium, and exclusive experience for your brand. It only takes a moment."}
+                ? "הכנו 4 שאלות קצרות כדי להתאים חוויה בלעדית למותג שלך. זה לוקח רק רגע."
+                : "We've prepared 4 brief questions to tailor a bespoke experience for your brand. It only takes a moment."}
             </p>
 
             <button
@@ -186,7 +186,7 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
           <div className="animate-fade-in">
             <StepHeader
               num={1} total={4}
-              title={isHe ? "בחר שפה לחוויה הפרימיום שלך" : "Choose the language for your premium experience"}
+              title="?Which language do you want / באיזו שפה תרצה להשתמש"
             />
             <div className="grid grid-cols-2 gap-2.5 mb-7">
               {languageOptions.map((option) => {

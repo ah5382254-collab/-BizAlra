@@ -90,10 +90,10 @@ const CreatePage = () => {
                 setSelectedTool(tool.id);
                 navigate(tool.route);
               }}
-              className="relative w-full rounded-3xl bg-white shadow-[0_18px_50px_-28px_rgba(0,24,48,0.18)] border border-transparent transition-all duration-300 ease-out overflow-hidden hover:border-[#001830] hover:shadow-[0_18px_50px_-28px_rgba(0,24,48,0.28)]"
-              style={{ animationDelay: `${i * 55}ms`, minHeight: "104px" }}
+              className={`relative w-full rounded-3xl bg-white shadow-[0_18px_50px_-28px_rgba(0,24,48,0.18)] border transition-all duration-300 ease-out overflow-hidden ${selectedTool === tool.id ? "border-[#001830]" : "border-transparent hover:border-[#001830]/30"}`}
+              style={{ animationDelay: `${i * 55}ms`, minHeight: "124px" }}
             >
-              <div className="flex items-center justify-between gap-4 px-5 py-5">
+              <div className="flex items-center gap-4 px-5 py-5 h-full">
                 <div className={`flex items-center gap-4 ${isHe ? "flex-row-reverse" : "flex-row"}`}>
                   <div className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0" style={{ backgroundColor: ICON_BG }}>
                     <IconComp size={24} strokeWidth={1.5} style={{ color: NAVY }} />
@@ -107,10 +107,6 @@ const CreatePage = () => {
                       {t(tool.descKey)}
                     </div>
                   </div>
-                </div>
-
-                <div className="w-10 h-10 rounded-2xl flex items-center justify-center bg-[#F1F6FB]">
-                  <Arrow size={18} strokeWidth={2} style={{ color: NAVY, opacity: 0.65 }} />
                 </div>
               </div>
             </button>
