@@ -3,42 +3,48 @@ import { useNavigate } from "react-router-dom";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/hooks/useAuth";
 import OnboardingFlow from "@/components/OnboardingFlow";
-import AuthSection from "@/components/AuthSection";
+import HomePage from "./HomePage";
 
-type Step = "onboarding" | "main";
+type Step = "onboarding" | "home" | "auth";
 
 const LandingPage = () => {
   const { lang } = useI18n();
-  const { user, loading } = useAuth();
+  const { user, loading, profile } = useAuth();
   const navigate = useNavigate();
+  const isHe = lang === "he";
 
   const [step, setStep] = useState<Step>("onboarding");
 
   useEffect(() => {
+    // If already authenticated, skip onboarding and go to home
     if (!loading && user) {
-      navigate("/dashboard");
+      setStep("home");
     }
-  }, [user, loading, navigate]);
+  }, [user, loading]);
 
   const onOnboardingComplete = useCallback(() => {
-    setStep("main");
+    // After onboarding, user can either:
+    // 1. Continue as guest (go to home but still guest)
+    // 2. Continue with login/signup (show auth page)
+    setStep("home");
   }, []);
 
-  const handleGuestContinue = () => {
-    navigate("/create");
-  };
+  // If user is loading, show nothing
+  if (loading) {
+    return null;
+  }
 
+  // Show onboarding for guests only
   if (step === "onboarding" && !user) {
     return <OnboardingFlow onComplete={onOnboardingComplete} />;
   }
 
-  // For guests who completed onboarding, allow access to create
-  if (!user && step === "main") {
-    navigate("/create");
-    return null;
+  // Show home page for both guests (after onboarding) and authenticated users
+  if (step === "home") {
+    return <HomePage />;
   }
 
-  // This should not be reached for authenticated users due to redirect
+  // Fallback (should not reach here)
   return null;
 };
 

@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { safeSetItem, safeSetSessionItem } from "@/lib/safe-storage";
+import { safeSetItem, safeSetSessionItem, safeGetSessionItem } from "@/lib/safe-storage";
 import { toast } from "sonner";
+import { createGuestSession, updateGuestSession, saveGuestOnboardingAnswers } from "@/lib/guest-session";
 import {
   ArrowLeft, Check,
   ShoppingBag, Utensils, Star, Home, Monitor, Briefcase,
@@ -16,7 +18,7 @@ interface OnboardingFlowProps {
   onComplete: () => void;
 }
 
-type Step = "greeting" | "language" | "business" | "business-info" | "audience" | "audience-info" | "goal" | "done";
+type Step = "greeting" | "language" | "business" | "business-info" | "audience" | "audience-info" | "goal" | "done" | "guest-auth-choice";
 
 type LangOption = {
   label: string;
@@ -714,32 +716,7 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
                 : "Everything's tailored just for you — smart, precise content for your business. No complications, no waiting. Let's build something great."}
             </p>
             <button
-              onClick={async () => {
-                const onboardingData = {
-                  business_type: businessType,
-                  target_audience: audience,
-                  business_goals: goal,
-                };
-
-                if (user) {
-                  const { error } = await supabase
-                    .from("profiles")
-                    .update({
-                      ...onboardingData,
-                      onboarding_completed: true,
-                    })
-                    .eq("user_id", user.id);
-
-                  if (error) {
-                    toast.error(isHe ? "שגיאה בשמירת הנתונים" : "Error saving data");
-                    return;
-                  }
-                } else {
-                  safeSetSessionItem("bizaira_onboarding", JSON.stringify(onboardingData));
-                }
-
-                onComplete();
-              }}
+              onClick={() => setStep("guest-auth-choice")}
               style={{
                 width: "100%",
                 padding: "16px 24px",
@@ -766,6 +743,115 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
             >
               {isHe ? "בואו נתחיל!" : "Let's Start!"}
             </button>
+          </div>
+        )}
+
+        {/* ─── Screen 7: Guest vs Auth Choice ─── */}
+        {step === "guest-auth-choice" && (
+          <div className="animate-fade-in text-center">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4" style={{ color: NAVY, fontFamily: "'Montserrat', sans-serif" }}>
+              {isHe ? "בואו נתחילו" : "Let's Get Started"}
+            </h2>
+            <p className="mb-8 max-w-md mx-auto" style={{ color: DARK_GRAY }}>
+              {isHe
+                ? "תוכלו להמשיך כאורח או להתחבר כדי לשמור את כל היצירות שלכם."
+                : "You can continue as a guest or sign in to save all your creations."}
+            </p>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "24px" }}>
+              {/* Guest Option */}
+              <button
+                onClick={() => {
+                  const onboardingData = {
+                    business_type: businessType,
+                    target_audience: audience,
+                    business_goals: goal,
+                  };
+                  createGuestSession();
+                  updateGuestSession(onboardingData);
+                  saveGuestOnboardingAnswers(onboardingData);
+                  onComplete();
+                }}
+                style={{
+                  padding: "24px",
+                  borderRadius: "12px",
+                  backgroundColor: "hsl(0 0% 100%)",
+                  border: `2px solid ${LIGHT_GRAY}`,
+                  color: NAVY,
+                  cursor: "pointer",
+                  transition: "all 0.3s ease",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "12px",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = NAVY;
+                  e.currentTarget.style.backgroundColor = "hsl(220 25% 97%)";
+                  e.currentTarget.style.boxShadow = `0 6px 16px -6px ${NAVY}`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = LIGHT_GRAY;
+                  e.currentTarget.style.backgroundColor = "hsl(0 0% 100%)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                <User size={24} />
+                <div>
+                  <p style={{ fontWeight: 600, fontSize: "1rem" }}>
+                    {isHe ? "המשך כאורח" : "Continue as Guest"}
+                  </p>
+                  <p style={{ fontSize: "0.875rem", marginTop: "4px", color: MID_GRAY }}>
+                    {isHe ? "ללא שמירה" : "No saving"}
+                  </p>
+                </div>
+              </button>
+
+              {/* Register Option */}
+              <button
+                onClick={() => {
+                  const onboardingData = {
+                    business_type: businessType,
+                    target_audience: audience,
+                    business_goals: goal,
+                  };
+                  saveGuestOnboardingAnswers(onboardingData);
+                  window.location.href = "/auth";
+                }}
+                style={{
+                  padding: "24px",
+                  borderRadius: "12px",
+                  backgroundColor: NAVY,
+                  border: `2px solid ${NAVY}`,
+                  color: CREAM,
+                  cursor: "pointer",
+                  transition: "all 0.3s ease",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "12px",
+                  boxShadow: `0 6px 16px -6px ${NAVY}`,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow = `0 8px 24px -6px ${NAVY}`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = `0 6px 16px -6px ${NAVY}`;
+                }}
+              >
+                <UserPlus size={24} />
+                <div>
+                  <p style={{ fontWeight: 600, fontSize: "1rem" }}>
+                    {isHe ? "התחברות / הרשמה" : "Login / Sign Up"}
+                  </p>
+                  <p style={{ fontSize: "0.875rem", marginTop: "4px", color: "rgba(255,255,255,0.7)" }}>
+                    {isHe ? "עם שמירה" : "With saving"}
+                  </p>
+                </div>
+              </button>
+            </div>
           </div>
         )}
       </div>

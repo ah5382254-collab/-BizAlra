@@ -1,126 +1,197 @@
-import { Link } from "react-router-dom";
-import SparkleIcon from "@/components/SparkleIcon";
-import { Sparkles, ArrowLeft, ArrowRight, Camera, MessageSquare, BarChart3, Clock, DollarSign, HelpCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Wand2, User, BarChart3, CreditCard, HelpCircle } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/hooks/useAuth";
 
+// Business-Luxury Color Palette (NO GOLD)
+const NAVY = "#0D2344";
+const CREAM = "#FBF4E8";
+const OFF_WHITE = "#F5F0E8";
+const LIGHT_TEXT = "#747474";
+
 const HomePage = () => {
-  const { t, lang } = useI18n();
-  const { user } = useAuth();
+  const { lang } = useI18n();
+  const { user, profile } = useAuth();
+  const navigate = useNavigate();
   const isHe = lang === "he";
-  const BackArrow = lang === "he" ? ArrowLeft : ArrowRight;
-  const userName = user?.user_metadata?.full_name;
 
-  const tools = [
-    { title: t("tool.photos.title"), desc: t("tool.photos.desc"), to: "/create/product-photos", Icon: Camera },
-    { title: t("tool.messages.title"), desc: t("tool.messages.desc"), to: "/create/messages", Icon: MessageSquare },
-    { title: t("tool.analytics.title"), desc: t("tool.analytics.desc"), to: "/create/analytics", Icon: BarChart3 },
-    { title: t("tool.time.title"), desc: t("tool.time.desc"), to: "/create/time", Icon: Clock },
-    { title: t("tool.pricing.title"), desc: t("tool.pricing.desc"), to: "/create/pricing", Icon: DollarSign },
-  ];
+  const userName = profile?.full_name || user?.user_metadata?.full_name || (isHe ? "משתמש" : "User");
 
-  const slides = [
-    { title: t("home.slide1.title"), desc: t("home.slide1.desc") },
-    { title: t("home.slide2.title"), desc: t("home.slide2.desc") },
-    { title: t("home.slide3.title"), desc: t("home.slide3.desc") },
+  // Feature cards matching specification exactly
+  const features = [
+    {
+      id: 1,
+      icon: Wand2,
+      titleHe: "התחל ליצור",
+      titleEn: "Start Creating",
+      descHe: "תוכן שיווקי, תמונות וסרטונים",
+      descEn: "Marketing content, photos & videos",
+      path: "/create",
+      bgColor: "#0D2344",
+    },
+    {
+      id: 2,
+      icon: User,
+      titleHe: "אזור אישי",
+      titleEn: "My Area",
+      descHe: "פרופיל והגדרות אישיות",
+      descEn: "Profile & Personal Settings",
+      path: "/profile",
+      bgColor: "#1A3A52",
+    },
+    {
+      id: 3,
+      icon: BarChart3,
+      titleHe: "מעקב פעילות",
+      titleEn: "Activity Tracking",
+      descHe: "ניתוח עסקי ותובנות חכמות",
+      descEn: "Business analytics & insights",
+      path: "/create/analytics",
+      bgColor: "#264B6A",
+    },
+    {
+      id: 4,
+      icon: CreditCard,
+      titleHe: "ניהול מנוי",
+      titleEn: "Manage Subscription",
+      descHe: "תכניות ותמחור",
+      descEn: "Plans & Pricing",
+      path: "/pricing",
+      bgColor: "#2D5A78",
+    },
+    {
+      id: 5,
+      icon: HelpCircle,
+      titleHe: "תמיכה",
+      titleEn: "Support",
+      descHe: "עזרה וליווי מקצועי",
+      descEn: "Help & Professional Guidance",
+      path: "/support",
+      bgColor: "#376386",
+    },
   ];
 
   return (
-    <div className="px-4 pt-8 pb-4">
-      {/* Hero */}
-      <div className="text-center mb-12 animate-float-up pt-4">
-        <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-6 tracking-tight text-center" style={{color: "#001830", fontFamily: "'Playfair Display', serif"}}>
-          {userName ? (isHe ? `המוח העסקי שלך: ${userName}, מה תרצה לעשות היום?` : `Your Business Brain: ${userName}, what would you like to do today?`) : t("home.hero.title2")}
+    <div
+      className="min-h-screen pb-24 px-4 sm:px-6 md:px-8"
+      dir={isHe ? "rtl" : "ltr"}
+      style={{ backgroundColor: CREAM }}
+    >
+      {/* Header Greeting - Specification Format */}
+      <div className="pt-8 pb-8 max-w-5xl mx-auto">
+        <h1
+          className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight mb-3"
+          style={{ color: NAVY, fontFamily: "'Montserrat', sans-serif", fontWeight: 700 }}
+        >
+          {isHe ? `שלום ${userName},` : `Hello ${userName},`}
         </h1>
-        <p className="text-primary text-base md:text-lg leading-relaxed max-w-md mx-auto mb-7" style={{fontFamily: "'Montserrat', sans-serif", fontWeight: 500}}>
-          {userName ? (isHe ? "המערכת מוכנה לשרת את העסק שלך עם כל הכלים הנכונים" : "The system is ready to serve your business with the right tools") : t("home.hero.desc")}
+        <h2
+          className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4"
+          style={{ color: NAVY, fontFamily: "'Montserrat', sans-serif", fontWeight: 700 }}
+        >
+          {isHe ? "מה תרצה לבנות היום?" : "What would you like to build today?"}
+        </h2>
+        <p className="text-base sm:text-lg" style={{ color: LIGHT_TEXT }}>
+          {isHe
+            ? "בחר כלי מהרשתוח לתחת ותתחיל ליצור תוכן שיווקי, ניתוח עסקי ועוד."
+            : "Choose a tool below and start creating marketing content, business analytics and more."}
         </p>
-
-        {userName && (
-          <div className="max-w-2xl mx-auto mb-7 grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <Link to="/create" className="luxury-card rounded-2xl bg-luxury-navy/95 text-white px-5 py-4 flex items-center justify-center gap-2 hover:shadow-xl transition-all">
-              <Sparkles size={18} />
-              {isHe ? "יצירה" : "Create"}
-            </Link>
-            <Link to="/dashboard" className="luxury-card rounded-2xl bg-white border border-luxury-gray-200 px-5 py-4 flex items-center justify-center gap-2 hover:shadow-lg transition-all">
-              <ArrowRight size={18} className="text-luxury-navy" />
-              {isHe ? "אזור אישי" : "My Area"}
-            </Link>
-            <Link to="/support" className="luxury-card rounded-2xl bg-white border border-luxury-gray-200 px-5 py-4 flex items-center justify-center gap-2 hover:shadow-lg transition-all">
-              <HelpCircle size={18} className="text-luxury-navy" />
-              {isHe ? "תמיכה" : "Support"}
-            </Link>
-          </div>
-        )}
-
-        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-          <Link
-            to="/create"
-            className="gradient-glow glow-shadow text-primary-foreground font-bold px-8 py-4 rounded-2xl text-lg flex items-center gap-2 transition-all duration-300 hover:scale-105 animate-glow-pulse"
-            style={{fontFamily: "'Montserrat', sans-serif"}}
-          >
-            <Sparkles size={20} />
-            {t("home.cta.start")}
-          </Link>
-          <Link
-            to="/auth"
-            className="bg-card border border-border text-foreground font-semibold px-8 py-4 rounded-2xl text-lg flex items-center gap-2 transition-all duration-300 hover:scale-105 hover:border-primary/40"
-            style={{fontFamily: "'Montserrat', sans-serif"}}
-          >
-            {t("home.cta.auth")}
-            <BackArrow size={18} />
-          </Link>
-        </div>
       </div>
 
-      {/* Explanation slides */}
-      <div className="mb-10">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {slides.map((slide, i) => (
-            <div
-              key={i}
-              className="glass-card rounded-2xl p-5 transition-all duration-300"
-              style={{ animationDelay: `${i * 100}ms`, fontFamily: "'Montserrat', sans-serif" }}
-            >
-              <h4 className="font-bold text-sm text-foreground mb-2" style={{fontWeight: 700}}>{slide.title}</h4>
-              <p className="text-xs text-muted-foreground leading-relaxed">{slide.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Tools grid */}
-      <div className="mb-6">
-        <h3 className="text-lg font-bold mb-5 text-foreground flex items-center gap-2" style={{fontFamily: "'Montserrat', sans-serif", fontWeight: 700}}>
-          <SparkleIcon size={14} />
-          {t("home.tools.title")}
-        </h3>
-        <div className="grid grid-cols-2 gap-3">
-          {tools.map((tool, i) => {
-            const Icon = tool.Icon;
+      {/* Feature Cards Grid - Spec Section: Main Feature Cards */}
+      <div className="max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
+          {features.map((feature) => {
+            const IconComponent = feature.icon;
             return (
-              <Link
-                key={tool.title}
-                to={tool.to}
-                className="glass-card rounded-2xl p-4 hover:scale-[1.03] hover:glow-shadow transition-all duration-300 group"
-                style={{ animationDelay: `${i * 80}ms`, fontFamily: "'Montserrat', sans-serif" }}
+              <button
+                key={feature.id}
+                onClick={() => navigate(feature.path)}
+                className="group relative overflow-hidden rounded-2xl p-6 sm:p-7 text-left transition-all duration-300 hover:shadow-xl active:scale-95"
+                style={{
+                  backgroundColor: feature.bgColor,
+                  boxShadow: "0 4px 12px rgba(13, 35, 68, 0.1)",
+                }}
               >
-                <div className={`flex items-start gap-3 ${isHe ? "flex-row-reverse text-right" : ""}`}>
-                  <div className="w-11 h-11 rounded-2xl bg-white/90 flex items-center justify-center shadow-sm">
-                    <Icon size={20} className="text-primary" />
+                {/* Hover effect */}
+                <div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300"
+                  style={{ backgroundColor: "#FFFFFF" }}
+                />
+
+                {/* Content */}
+                <div className="relative z-10">
+                  <div className="flex items-start justify-between mb-4">
+                    <IconComponent
+                      size={32}
+                      strokeWidth={1.5}
+                      style={{ color: "#FFFFFF" }}
+                    />
                   </div>
-                  <div className="min-w-0">
-                    <div className="font-semibold text-sm text-foreground group-hover:gradient-glow-text transition-all" style={{fontWeight: 700}}>
-                      {tool.title}
-                    </div>
-                    <div className="text-xs text-muted-foreground mt-1">
-                      {tool.desc}
-                    </div>
-                  </div>
+                  <h3
+                    className="text-xl sm:text-2xl font-bold mb-2"
+                    style={{ color: "#FFFFFF", fontFamily: "'Montserrat', sans-serif" }}
+                  >
+                    {isHe ? feature.titleHe : feature.titleEn}
+                  </h3>
+                  <p
+                    className="text-sm sm:text-base"
+                    style={{ color: "rgba(255, 255, 255, 0.85)" }}
+                  >
+                    {isHe ? feature.descHe : feature.descEn}
+                  </p>
                 </div>
-              </Link>
+
+                {/* Bottom accent line */}
+                <div
+                  className="absolute bottom-0 left-0 right-0 h-1.5 origin-left group-hover:scale-x-100 transform scale-x-0 transition-transform duration-300"
+                  style={{ backgroundColor: "rgba(255, 255, 255, 0.4)" }}
+                />
+              </button>
             );
           })}
+        </div>
+      </div>
+
+      {/* Quick Stats Section */}
+      <div className="max-w-5xl mx-auto mt-12 sm:mt-16">
+        <div
+          className="grid grid-cols-3 gap-4 p-6 sm:p-8 rounded-2xl"
+          style={{ backgroundColor: OFF_WHITE }}
+        >
+          <div>
+            <p
+              className="text-3xl sm:text-4xl font-bold"
+              style={{ color: NAVY, fontFamily: "'Montserrat', sans-serif" }}
+            >
+              0
+            </p>
+            <p className="text-xs sm:text-sm mt-2" style={{ color: LIGHT_TEXT }}>
+              {isHe ? "יצירות" : "Creations"}
+            </p>
+          </div>
+          <div>
+            <p
+              className="text-3xl sm:text-4xl font-bold"
+              style={{ color: NAVY, fontFamily: "'Montserrat', sans-serif" }}
+            >
+              0
+            </p>
+            <p className="text-xs sm:text-sm mt-2" style={{ color: LIGHT_TEXT }}>
+              {isHe ? "שמורות" : "Saved"}
+            </p>
+          </div>
+          <div>
+            <p
+              className="text-3xl sm:text-4xl font-bold"
+              style={{ color: NAVY, fontFamily: "'Montserrat', sans-serif" }}
+            >
+              0
+            </p>
+            <p className="text-xs sm:text-sm mt-2" style={{ color: LIGHT_TEXT }}>
+              {isHe ? "קרדיטים" : "Credits"}
+            </p>
+          </div>
         </div>
       </div>
     </div>
