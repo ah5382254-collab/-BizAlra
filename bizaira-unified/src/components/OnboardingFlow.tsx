@@ -170,7 +170,15 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
             </div>
 
             <h1 className={`hebrew-heading-1 ${isHe ? 'hebrew-heading-1' : ''} mb-4`} style={{ color: NAVY, fontFamily: isHe ? "var(--font-assistant)" : "var(--font-playfair)" }}>
-              {isHe ? "חווה את עתיד העסק שלך" : "Experience the future of your business"}
+              {isHe ? (
+                <>
+                  לעצב את עתיד העסק שלך עם <span style={{ color: GOLD }}>BizAIra</span>
+                </>
+              ) : (
+                <>
+                  Shape the future of your business with <span style={{ color: GOLD }}>BizAIra</span>
+                </>
+              )}
             </h1>
             <p className={`hebrew-body-large ${isHe ? 'hebrew-body-large' : ''} mb-12 max-w-md mx-auto`} style={{ color: DARK_GRAY }}>
               {isHe
@@ -190,7 +198,7 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
                 fontWeight: 600,
                 fontFamily: isHe ? "var(--font-assistant)" : "var(--font-montserrat)",
                 letterSpacing: "0.01em",
-                border: "none",
+                border: `1px solid ${GOLD}`,
                 cursor: "pointer",
                 boxShadow: `0 12px 30px -12px ${NAVY}`,
                 transition: "all 0.3s ease",
@@ -204,7 +212,7 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
                 e.currentTarget.style.boxShadow = `0 12px 30px -12px ${NAVY}`;
               }}
             >
-              {isHe ? "בואו נתחיל" : "Let's Begin"}
+              {isHe ? "התחלה עכשיו" : "Start Now"}
             </button>
           </div>
         )}
