@@ -97,7 +97,7 @@ const App = () => {
                 <Route path="/admin/users" element={<AdminLayout><AdminUsersPage /></AdminLayout>} />
                 <Route path="/admin/settings" element={<AdminLayout><AdminSettingsPage /></AdminLayout>} />
 
-                <Route path="/" element={<AppLayout><LandingPage /></AppLayout>} />
+                <Route path="/" element={<LandingPage />} />
                 <Route path="/create" element={<AppLayout><CreatePage /></AppLayout>} />
                 <Route path="/journal" element={<AppLayout><JournalPage /></AppLayout>} />
                 

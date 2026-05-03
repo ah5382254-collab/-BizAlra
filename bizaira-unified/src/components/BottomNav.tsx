@@ -19,14 +19,14 @@ const BottomNav = () => {
     { 
       to: "/create", 
       icon: Wand2, 
-      labelHe: "יצירה",
-      labelEn: "Create"
+      labelHe: "סטודיו",
+      labelEn: "Studio"
     },
     { 
       to: "/dashboard", 
       icon: User, 
-      labelHe: "האזור שלי",
-      labelEn: "My Area"
+      labelHe: "פרופיל",
+      labelEn: "Profile"
     },
     { 
       to: "/support", 

@@ -4,11 +4,10 @@ import { Sparkles, Mail, Lock, User, Phone, ArrowLeft, ArrowRight, Loader2, Eye,
 import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { getSavedGuestAnswers } from "@/lib/guest-session";
+import { safeSetItem } from "@/lib/safe-storage";
 
-const NAVY = "#0D2344";
-const CREAM = "#FBF4E8";
-const OFF_WHITE = "#F5F0E8";
+const MIDNIGHT_BLACK = "#0A0A1A";
+const INPUT_BG = "#F9F9FB";
 
 const AuthPage = () => {
   const { lang } = useI18n();
@@ -21,6 +20,7 @@ const AuthPage = () => {
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [fade, setFade] = useState(true);
   const BackArrow = isHe ? ArrowLeft : ArrowRight;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -39,7 +39,7 @@ const AuthPage = () => {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         toast.success(isHe ? "התחברת בהצלחה!" : "Logged in successfully!");
-        navigate("/");
+        navigate("/create");
       } else {
         const { error } = await supabase.auth.signUp({
           email,
@@ -55,6 +55,7 @@ const AuthPage = () => {
         });
         if (error) throw error;
         toast.success(isHe ? "החשבון נוצר! בדוק את האימייל שלך" : "Account created! Check your email");
+        navigate("/create");
       }
     } catch (error: any) {
       toast.error(error.message || "Something went wrong");
@@ -67,7 +68,7 @@ const AuthPage = () => {
     <div
       className="min-h-screen flex items-center justify-center px-5 py-10"
       dir={isHe ? "rtl" : "ltr"}
-      style={{ backgroundColor: CREAM }}
+      style={{ backgroundColor: "#FFFFFF" }}
     >
       <div className="w-full max-w-sm">
 
@@ -75,14 +76,14 @@ const AuthPage = () => {
         <div className="text-center mb-10">
           <div 
             className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5"
-            style={{ background: `linear-gradient(135deg, ${NAVY} 0%, ${NAVY} 100%)`, boxShadow: "0 8px 24px -4px rgba(13, 35, 68, 0.35)" }}
+            style={{ background: `linear-gradient(135deg, ${MIDNIGHT_BLACK} 0%, ${MIDNIGHT_BLACK} 100%)`, boxShadow: "0 8px 24px -4px rgba(10, 10, 26, 0.35)" }}
           >
             <Sparkles size={28} className="text-white" strokeWidth={1.5} />
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold mb-2 leading-tight" style={{ color: NAVY, fontFamily: "'Montserrat', sans-serif", fontWeight: 700 }}>
+          <h1 className="text-3xl md:text-4xl font-bold mb-2 leading-tight" style={{ color: MIDNIGHT_BLACK, fontFamily: "'Montserrat', sans-serif", fontWeight: 700 }}>
             {isHe ? "מתחילים להתחבר," : "Let's Connect,"}
           </h1>
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-tight" style={{ color: NAVY, fontFamily: "'Montserrat', sans-serif", fontWeight: 700 }}>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-tight" style={{ color: MIDNIGHT_BLACK, fontFamily: "'Montserrat', sans-serif", fontWeight: 700 }}>
             {isHe ? "להתחיל להשתמש" : "Get Started"}
           </h2>
           <p className="text-sm mt-3" style={{ color: "#747474" }}>
@@ -93,7 +94,7 @@ const AuthPage = () => {
         {/* Form card */}
         <form
           onSubmit={handleSubmit}
-          className="rounded-2xl p-7 space-y-5"
+          className={`rounded-2xl p-7 space-y-5 transition-opacity duration-300 ${fade ? 'opacity-100' : 'opacity-0'}`}
           style={{ backgroundColor: "#FFFFFF", boxShadow: "0 8px 40px -8px rgba(13, 35, 68, 0.1)" }}
         >
           {/* Name field */}
@@ -111,8 +112,15 @@ const AuthPage = () => {
                   value={name}
                   onChange={e => setName(e.target.value)}
                   placeholder={isHe ? "שם מלא" : "Full Name"}
-                  className="w-full bg-white border border-gray-200 rounded-xl py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
-                  style={{ [isHe ? "paddingRight" : "paddingLeft"]: "40px", [isHe ? "paddingLeft" : "paddingRight"]: "16px" }}
+                  className="w-full rounded-2xl py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none transition-all"
+                  style={{ 
+                    backgroundColor: INPUT_BG, 
+                    border: "none",
+                    [isHe ? "paddingRight" : "paddingLeft"]: "40px", 
+                    [isHe ? "paddingLeft" : "paddingRight"]: "16px" 
+                  }}
+                  onFocus={(e) => e.target.style.border = "1px solid #000"}
+                  onBlur={(e) => e.target.style.border = "none"}
                 />
               </div>
             </FieldWrapper>
@@ -134,8 +142,15 @@ const AuthPage = () => {
                   onChange={e => setPhone(e.target.value)}
                   placeholder={isHe ? "050-1234567" : "+972-50-1234567"}
                   dir="ltr"
-                  className="w-full bg-white border border-gray-200 rounded-xl py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
-                  style={{ [isHe ? "paddingRight" : "paddingLeft"]: "40px", [isHe ? "paddingLeft" : "paddingRight"]: "16px" }}
+                  className="w-full rounded-2xl py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none transition-all"
+                  style={{ 
+                    backgroundColor: INPUT_BG, 
+                    border: "none",
+                    [isHe ? "paddingRight" : "paddingLeft"]: "40px", 
+                    [isHe ? "paddingLeft" : "paddingRight"]: "16px" 
+                  }}
+                  onFocus={(e) => e.target.style.border = "1px solid #000"}
+                  onBlur={(e) => e.target.style.border = "none"}
                 />
               </div>
             </FieldWrapper>
@@ -156,8 +171,15 @@ const AuthPage = () => {
                 onChange={e => setEmail(e.target.value)}
                 placeholder="your@email.com"
                 dir="ltr"
-                className="w-full bg-white border border-gray-200 rounded-xl py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
-                style={{ [isHe ? "paddingRight" : "paddingLeft"]: "40px", [isHe ? "paddingLeft" : "paddingRight"]: "16px" }}
+                className="w-full rounded-2xl py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none transition-all"
+                style={{ 
+                  backgroundColor: INPUT_BG, 
+                  border: "none",
+                  [isHe ? "paddingRight" : "paddingLeft"]: "40px", 
+                  [isHe ? "paddingLeft" : "paddingRight"]: "16px" 
+                }}
+                onFocus={(e) => e.target.style.border = "1px solid #000"}
+                onBlur={(e) => e.target.style.border = "none"}
               />
             </div>
           </FieldWrapper>
@@ -177,8 +199,15 @@ const AuthPage = () => {
                 onChange={e => setPassword(e.target.value)}
                 placeholder="••••••••"
                 dir="ltr"
-                className="w-full bg-white border border-gray-200 rounded-xl py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
-                style={{ [isHe ? "paddingRight" : "paddingLeft"]: "40px", [isHe ? "paddingLeft" : "paddingRight"]: "40px" }}
+                className="w-full rounded-2xl py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none transition-all"
+                style={{ 
+                  backgroundColor: INPUT_BG, 
+                  border: "none",
+                  [isHe ? "paddingRight" : "paddingLeft"]: "40px", 
+                  [isHe ? "paddingLeft" : "paddingRight"]: "40px" 
+                }}
+                onFocus={(e) => e.target.style.border = "1px solid #000"}
+                onBlur={(e) => e.target.style.border = "none"}
               />
               <button
                 type="button"
@@ -196,23 +225,29 @@ const AuthPage = () => {
             type="submit"
             disabled={loading}
             className="w-full py-3.5 rounded-2xl font-bold text-white flex items-center justify-center gap-2 hover:scale-[1.02] transition-all disabled:opacity-60 disabled:cursor-not-allowed mt-2"
-            style={{ backgroundColor: NAVY }}
+            style={{ backgroundColor: MIDNIGHT_BLACK }}
           >
             {loading
               ? <Loader2 size={18} className="animate-spin" />
               : <Sparkles size={18} />}
-            {isLogin ? (isHe ? "התחברות" : "Sign In") : (isHe ? "יצירת חשבון" : "Create Account")}
+            {isLogin ? (isHe ? "התחבר" : "Login") : (isHe ? "יצירת חשבון" : "Create Account")}
           </button>
 
           {/* Toggle */}
           <div className="text-center pt-3 space-y-2">
             <button
               type="button"
-              onClick={() => setIsLogin(!isLogin)}
+              onClick={() => {
+                setFade(false);
+                setTimeout(() => {
+                  setIsLogin(!isLogin);
+                  setFade(true);
+                }, 300);
+              }}
               className="text-sm font-semibold transition-colors"
-              style={{ color: NAVY }}
+              style={{ color: MIDNIGHT_BLACK }}
             >
-              {isLogin ? (isHe ? "אין לך חשבון? הרשם כאן" : "No account? Sign up here") : (isHe ? "כבר יש לך חשבון? התחבר" : "Already have an account? Sign in")}
+              {isLogin ? (isHe ? "אין לך חשבון? הרשם כאן" : "No account? Sign up here") : (isHe ? "כבר יש לך חשבון? התחבר כאן" : "Already have an account? Login here")}
             </button>
           </div>
         </form>
@@ -221,9 +256,12 @@ const AuthPage = () => {
         <div className="text-center mt-6">
           <button
             type="button"
-            onClick={() => navigate("/")}
+            onClick={() => {
+              safeSetItem("guest_mode", "true");
+              navigate("/");
+            }}
             className="text-sm font-medium transition-colors"
-            style={{ color: NAVY }}
+            style={{ color: MIDNIGHT_BLACK }}
           >
             {isHe ? "או המשך כאורח →" : "Or continue as guest →"}
           </button>

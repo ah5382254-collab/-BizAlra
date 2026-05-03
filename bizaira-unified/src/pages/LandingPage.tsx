@@ -4,8 +4,10 @@ import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/hooks/useAuth";
 import OnboardingFlow from "@/components/OnboardingFlow";
 import HomePage from "./HomePage";
+import AuthPage from "./AuthPage";
+import { safeSetItem, safeGetItem } from "@/lib/safe-storage";
 
-type Step = "onboarding" | "home" | "auth";
+type Step = "onboarding" | "auth" | "home";
 
 const LandingPage = () => {
   const { lang } = useI18n();
@@ -16,30 +18,50 @@ const LandingPage = () => {
   const [step, setStep] = useState<Step>("onboarding");
 
   useEffect(() => {
-    // If already authenticated, skip onboarding and go to home
-    if (!loading && user) {
+    if (loading) return;
+
+    const onboardingComplete = safeGetItem("onboarding_complete");
+    const isGuest = safeGetItem("guest_mode");
+
+    if (user) {
       setStep("home");
+    } else if (isGuest) {
+      setStep("onboarding");
+    } else if (onboardingComplete) {
+      setStep("auth");
+    } else {
+      setStep("onboarding");
     }
   }, [user, loading]);
 
   const onOnboardingComplete = useCallback(() => {
-    // After onboarding, user can either:
-    // 1. Continue as guest (go to home but still guest)
-    // 2. Continue with login/signup (show auth page)
-    setStep("home");
+    safeSetItem("onboarding_complete", "true");
+    setStep("auth");
   }, []);
 
-  // If user is loading, show nothing
+  // If user is loading, show loading
   if (loading) {
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading BizAIra...</p>
+        </div>
+      </div>
+    );
   }
 
-  // Show onboarding for guests only
+  // Show onboarding for new users
   if (step === "onboarding" && !user) {
     return <OnboardingFlow onComplete={onOnboardingComplete} />;
   }
 
-  // Show home page for both guests (after onboarding) and authenticated users
+  // Show auth after onboarding
+  if (step === "auth") {
+    return <AuthPage />;
+  }
+
+  // Show home page for authenticated users or after auth
   if (step === "home") {
     return <HomePage />;
   }
