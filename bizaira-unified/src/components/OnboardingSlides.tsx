@@ -10,35 +10,20 @@ const OnboardingSlides = ({ onComplete }: OnboardingSlidesProps) => {
   const { lang } = useI18n();
   const [current, setCurrent] = useState(0);
 
-  const slides = lang === "he"
-    ? [
-        {
-          title: "ברוכים הבאים ל-BizAIra",
-          desc: "הכלי הכי פשוט ונוח ליצירת תוכן מקצועי לעסק שלך. בלי ידע טכני, בלי מאמץ — פשוט מתחילים ומקבלים תוצאות.",
-        },
-        {
-          title: "הכל מוכן בשבילך",
-          desc: "תמונות מוצר, טקסטים שיווקיים ועוד — הכל נוצר אוטומטית ומותאם בדיוק לעסק שלך, בכמה לחיצות בלבד.",
-        },
-        {
-          title: "פשוט, מהיר ונעים",
-          desc: "כל פעולה באפליקציה מרגישה קלה וטבעית. אין תפריטים מסובכים, אין בלבול — רק חוויה חלקה מהתחלה ועד הסוף.",
-        },
-      ]
-    : [
-        {
-          title: "Welcome to BizAIra",
-          desc: "The easiest and most intuitive way to create professional content for your business. No technical skills needed — just start and get results.",
-        },
-        {
-          title: "Everything Ready for You",
-          desc: "Product photos, marketing texts, business analytics and more — all created automatically and tailored exactly to your business, in just a few clicks.",
-        },
-        {
-          title: "Simple, Fast & Enjoyable",
-          desc: "Every action in the app feels light and natural. No complicated menus, no confusion — just a smooth experience from start to finish.",
-        },
-      ];
+  const slides = [
+    {
+      title: t("onboarding.slides.title1"),
+      desc: t("onboarding.slides.desc1"),
+    },
+    {
+      title: t("onboarding.slides.title2"),
+      desc: t("onboarding.slides.desc2"),
+    },
+    {
+      title: t("onboarding.slides.title3"),
+      desc: t("onboarding.slides.desc3"),
+    },
+  ];
 
   const next = () => {
     if (current < slides.length - 1) setCurrent(current + 1);
@@ -57,7 +42,7 @@ const OnboardingSlides = ({ onComplete }: OnboardingSlidesProps) => {
         onClick={onComplete}
         className="absolute top-6 end-6 text-sm text-muted-foreground hover:text-foreground transition-colors"
       >
-        {lang === "he" ? "דלג" : "Skip"}
+        {t("onboarding.slides.skip")}
       </button>
 
       {/* Slide content */}

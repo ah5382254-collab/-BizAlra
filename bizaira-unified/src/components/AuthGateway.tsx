@@ -20,7 +20,7 @@ interface AuthGatewayProps {
 }
 
 const AuthGateway = ({ onComplete, onboardingData }: AuthGatewayProps) => {
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
   const navigate = useNavigate();
   const isHe = lang === "he";
   const [isLogin, setIsLogin] = useState(false);
@@ -35,15 +35,15 @@ const AuthGateway = ({ onComplete, onboardingData }: AuthGatewayProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isLogin && (!name || !email || !password || !phone)) {
-      toast.error(isHe ? "נא למלא את כל השדות" : "Please fill in all fields");
+      toast.error(t("auth.gateway.error.fillAllFields"));
       return;
     }
     if (!isLogin && !agreePolicy) {
-      toast.error(isHe ? "אנא קבל את מדיניות האבטחה" : "Please accept the security policy");
+      toast.error(t("auth.gateway.error.acceptSecurityPolicy"));
       return;
     }
     if (isLogin && (!email || !password)) {
-      toast.error(isHe ? "נא למלא אימייל וסיסמה" : "Please fill in email and password");
+      toast.error(t("auth.gateway.error.fillEmailPassword"));
       return;
     }
     setLoading(true);
@@ -51,7 +51,7 @@ const AuthGateway = ({ onComplete, onboardingData }: AuthGatewayProps) => {
       if (isLogin) {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        toast.success(isHe ? "התחברת בהצלחה!" : "Logged in successfully!");
+        toast.success(t("auth.gateway.success.login"));
         onComplete("auth");
       } else {
         const { error } = await supabase.auth.signUp({
@@ -67,7 +67,7 @@ const AuthGateway = ({ onComplete, onboardingData }: AuthGatewayProps) => {
           },
         });
         if (error) throw error;
-        toast.success(isHe ? "החשבון נוצר! בדוק את האימייל שלך" : "Account created! Check your email");
+        toast.success(t("auth.gateway.success.signup"));
         onComplete("auth");
       }
     } catch (error: any) {
@@ -85,11 +85,11 @@ const AuthGateway = ({ onComplete, onboardingData }: AuthGatewayProps) => {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center px-5 py-10"
+      className="min-h-screen flex items-center justify-center px-5 py-10 overflow-y-auto"
       dir={isHe ? "rtl" : "ltr"}
       style={{ backgroundColor: PEARL_WHITE }}
     >
-      <div className="w-full max-w-sm">
+      <div className="w-full max-w-sm mx-auto">
 
         {/* Logo */}
         <div className="text-center mb-10">
@@ -100,25 +100,25 @@ const AuthGateway = ({ onComplete, onboardingData }: AuthGatewayProps) => {
             <Sparkles size={28} className="text-white" strokeWidth={1.5} />
           </div>
           <h1 className="text-3xl md:text-4xl font-bold mb-2 leading-tight" style={{ color: MIDNIGHT_BLACK, fontFamily: "'Assistant', sans-serif", fontWeight: 700 }}>
-            {isHe ? "הצטרף היום כדי להתחיל." : "Join today to get started."}
+            {t("auth.gateway.joinToday")}
           </h1>
           <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-tight" style={{ color: MIDNIGHT_BLACK, fontFamily: "'Assistant', sans-serif", fontWeight: 700 }}>
-            {isLogin ? (isHe ? "התחל עכשיו" : "Start Now") : ""}
+            {isLogin ? t("auth.gateway.startNow") : ""}
           </h2>
           <p className="text-sm mt-3" style={{ color: "#747474" }}>
-            {isLogin ? (isHe ? "התחבר כדי להמשיך" : "Sign in to continue") : (isHe ? "פתח את החשבון שלך כדי לשמור ולנהל את היצירות" : "Open your account to save and manage creations")}
+            {isLogin ? t("auth.gateway.signInToContinue") : t("auth.gateway.openAccount")}
           </p>
         </div>
 
         {/* Form card */}
         <form
           onSubmit={handleSubmit}
-          className="rounded-2xl p-7 space-y-5 transition-opacity duration-300"
+          className="rounded-2xl p-7 space-y-5 transition-opacity duration-300 max-h-[calc(100vh-180px)] overflow-y-auto pb-8"
           style={{ backgroundColor: "#FFFFFF", boxShadow: "0 8px 40px -8px rgba(0,31,63,0.1)" }}
         >
           {/* Name field */}
           {!isLogin && (
-            <FieldWrapper label={isHe ? "שם מלא" : "Full Name"}>
+            <FieldWrapper label={t("auth.gateway.fullName")}>
               <div className="relative">
                 <User
                   size={15}
@@ -130,7 +130,7 @@ const AuthGateway = ({ onComplete, onboardingData }: AuthGatewayProps) => {
                   type="text"
                   value={name}
                   onChange={e => setName(e.target.value)}
-                  placeholder={isHe ? "שם מלא" : "Full Name"}
+                  placeholder={t("auth.gateway.fullName")}
                   className="w-full rounded-2xl py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none transition-all"
                   style={{
                     backgroundColor: INPUT_BG,
@@ -147,7 +147,7 @@ const AuthGateway = ({ onComplete, onboardingData }: AuthGatewayProps) => {
 
           {/* Phone field */}
           {!isLogin && (
-            <FieldWrapper label={isHe ? "מספר טלפון" : "Phone Number"}>
+            <FieldWrapper label={t("auth.gateway.phoneNumber")}>
               <div className="relative">
                 <Phone
                   size={15}
@@ -159,7 +159,7 @@ const AuthGateway = ({ onComplete, onboardingData }: AuthGatewayProps) => {
                   type="tel"
                   value={phone}
                   onChange={e => setPhone(e.target.value)}
-                  placeholder={isHe ? "050-1234567" : "+972-50-1234567"}
+                  placeholder={t("auth.gateway.phoneNumber")}
                   dir="ltr"
                   className="w-full rounded-2xl py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none transition-all"
                   style={{
@@ -176,7 +176,7 @@ const AuthGateway = ({ onComplete, onboardingData }: AuthGatewayProps) => {
           )}
 
           {/* Email */}
-          <FieldWrapper label={isHe ? "אימייל" : "Email"}>
+          <FieldWrapper label={t("auth.gateway.email")}> 
             <div className="relative">
               <Mail
                 size={15}
@@ -204,7 +204,7 @@ const AuthGateway = ({ onComplete, onboardingData }: AuthGatewayProps) => {
           </FieldWrapper>
 
           {/* Password */}
-          <FieldWrapper label={isHe ? "סיסמה" : "Password"}>
+          <FieldWrapper label={t("auth.gateway.password")}> 
             <div className="relative">
               <Lock
                 size={15}
@@ -250,7 +250,7 @@ const AuthGateway = ({ onComplete, onboardingData }: AuthGatewayProps) => {
                 className="mt-1 h-4 w-4 rounded border-gray-300 text-black focus:ring-black"
               />
               <label htmlFor="security-policy" className="text-sm text-gray-700">
-                {isHe ? "אני מסכים למדיניות האבטחה ותנאי השירות (כולל העלאת תוכן ותמונות)." : "I agree to the security policy and terms of service (allowing content and image uploads)."}
+                {t("auth.gateway.privacyAgreement")}
               </label>
             </div>
           )}
@@ -265,33 +265,31 @@ const AuthGateway = ({ onComplete, onboardingData }: AuthGatewayProps) => {
             {loading
               ? <Loader2 size={18} className="animate-spin" />
               : <Sparkles size={18} />}
-            {isLogin ? (isHe ? "התחל עכשיו" : "Start Now") : (isHe ? "הרשמה" : "Sign Up")}
+            {isLogin ? t("auth.gateway.startNow") : t("auth.gateway.auth.signup")}
           </button>
 
           {/* Toggle */}
-          <div className="text-center pt-3 space-y-2">
+          <div className="text-center pt-3">
             <button
               type="button"
-              onClick={() => {
-                setIsLogin(!isLogin);
-              }}
+              onClick={() => setIsLogin(!isLogin)}
               className="text-sm font-semibold transition-colors"
-              style={{ color: MIDNIGHT_BLACK }}
+              style={{ color: MIDNIGHT_BLACK, fontFamily: "'Heebo', sans-serif" }}
             >
-              {isLogin ? (isHe ? "אין לך חשבון? הרשם כאן" : "No account? Sign up here") : (isHe ? "כבר יש לך חשבון? התחבר כאן" : "Already have an account? Login here")}
+              {isLogin ? t("auth.gateway.signupPrompt") : t("auth.gateway.loginPrompt")}
             </button>
           </div>
         </form>
 
         {/* Continue as guest link */}
-        <div className="text-center mt-6">
+        <div className="text-center mt-6 pb-6">
           <button
             type="button"
             onClick={handleGuest}
             className="text-sm font-medium transition-colors underline"
-            style={{ color: MIDNIGHT_BLACK }}
+            style={{ color: MIDNIGHT_BLACK, fontFamily: "'Heebo', sans-serif" }}
           >
-            {isHe ? "או המשך כאורח →" : "Continue as Guest"}
+            {t("auth.gateway.continueAsGuest")}
           </button>
         </div>
       </div>

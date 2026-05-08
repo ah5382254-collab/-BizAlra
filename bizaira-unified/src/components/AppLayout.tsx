@@ -31,7 +31,7 @@ const Layout = ({ children }: LayoutProps) => {
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div dir={isHe ? "rtl" : "ltr"} className={`min-h-screen flex flex-col bg-background ${isHe ? "text-right" : "text-left"}`}>
       {/* Skip to main content link */}
       <a
         href="#main-content"

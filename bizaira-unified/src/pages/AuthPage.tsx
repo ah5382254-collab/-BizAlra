@@ -4,14 +4,13 @@ import { Sparkles, Mail, Lock, User, Phone, Loader2, Eye, EyeOff } from "lucide-
 import { useI18n } from "@/lib/i18n";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { safeSetSessionItem } from "@/lib/safe-storage";
-import { createGuestSession, updateGuestSession, getSavedGuestAnswers } from "@/lib/guest-session";
+import { getSavedGuestAnswers } from "@/lib/guest-session";
 
 const MIDNIGHT_BLACK = "#0A0A1A";
 const INPUT_BG = "#F9F9FB";
 
 const AuthPage = () => {
-  const { lang } = useI18n();
+  const { lang, t } = useI18n();
   const navigate = useNavigate();
   const isHe = lang === "he";
   const [isLogin, setIsLogin] = useState(false);
@@ -71,7 +70,7 @@ const AuthPage = () => {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center px-5 py-10"
+      className="min-h-screen h-screen flex justify-center px-5 py-10 overflow-y-auto"
       dir={isHe ? "rtl" : "ltr"}
       style={{ backgroundColor: "#FFFFFF" }}
     >
@@ -85,21 +84,21 @@ const AuthPage = () => {
           >
             <Sparkles size={28} className="text-white" strokeWidth={1.5} />
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold mb-2 leading-tight" style={{ color: MIDNIGHT_BLACK, fontFamily: "'Montserrat', sans-serif", fontWeight: 700 }}>
-            {isHe ? "הצטרף היום כדי להתחיל." : "Join today to get started."}
+          <h1 className="text-3xl md:text-4xl font-bold mb-2 leading-tight" style={{ color: MIDNIGHT_BLACK, fontFamily: "'Assistant', sans-serif", fontWeight: 700 }}>
+            {t("auth.gateway.joinToday")}
           </h1>
-          <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-tight" style={{ color: MIDNIGHT_BLACK, fontFamily: "'Montserrat', sans-serif", fontWeight: 700 }}>
-            {isLogin ? (isHe ? "התחל עכשיו" : "Start Now") : ""}
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 leading-tight" style={{ color: MIDNIGHT_BLACK, fontFamily: "'Assistant', sans-serif", fontWeight: 700 }}>
+            {isLogin ? t("auth.gateway.startNow") : ""}
           </h2>
           <p className="text-sm mt-3" style={{ color: "#747474" }}>
-            {isLogin ? (isHe ? "התחבר כדי להמשיך" : "Sign in to continue") : (isHe ? "פתח את החשבון שלך כדי לשמור ולנהל את היצירות" : "Open your account to save and manage creations")}
+            {isLogin ? t("auth.gateway.signInToContinue") : t("auth.gateway.openAccount")}
           </p>
         </div>
 
         {/* Form card */}
         <form
           onSubmit={handleSubmit}
-          className={`rounded-2xl p-7 space-y-5 transition-opacity duration-300 ${fade ? 'opacity-100' : 'opacity-0'}`}
+          className={`rounded-2xl p-7 pb-14 space-y-5 transition-opacity duration-300 ${fade ? 'opacity-100' : 'opacity-0'}`}
           style={{ backgroundColor: "#FFFFFF", boxShadow: "0 8px 40px -8px rgba(13, 35, 68, 0.1)" }}
         >
           {/* Name field */}
@@ -236,7 +235,7 @@ const AuthPage = () => {
                 className="mt-1 h-4 w-4 rounded border-gray-300 text-black focus:ring-black"
               />
               <label htmlFor="security-policy" className="text-sm text-gray-700">
-                {isHe ? "אני מסכים למדיניות האבטחה ותנאי השירות (כולל העלאת תוכן ותמונות)." : "I agree to the security policy and terms of service (allowing content and image uploads)."}
+                {t("auth.gateway.privacyAgreement")}
               </label>
             </div>
           )}
@@ -255,7 +254,7 @@ const AuthPage = () => {
           </button>
 
           {/* Toggle */}
-          <div className="text-center pt-3 space-y-2">
+          <div className="text-center pt-3 space-y-3">
             <button
               type="button"
               onClick={() => {
@@ -266,29 +265,21 @@ const AuthPage = () => {
                 }, 300);
               }}
               className="text-sm font-semibold transition-colors"
-              style={{ color: MIDNIGHT_BLACK }}
+              style={{ color: MIDNIGHT_BLACK, fontFamily: "'Heebo', sans-serif" }}
             >
-              {isLogin ? (isHe ? "אין לך חשבון? הרשם כאן" : "No account? Sign up here") : (isHe ? "כבר יש לך חשבון? התחבר כאן" : "Already have an account? Login here")}
+              {isLogin ? t("auth.gateway.signupPrompt") : t("auth.gateway.loginPrompt")}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => navigate("/")}
+              className="inline-flex items-center justify-center w-full rounded-2xl border border-transparent bg-white py-3 text-sm font-semibold text-[#001F3F] transition hover:bg-slate-50"
+              style={{ boxShadow: "0 8px 24px -16px rgba(0,31,63,0.15)", fontFamily: "'Heebo', sans-serif" }}
+            >
+              {t("auth.gateway.continueAsGuest")}
             </button>
           </div>
         </form>
-
-        {/* Continue as guest link */}
-        <div className="text-center mt-6">
-          <button
-            type="button"
-            onClick={() => {
-              createGuestSession();
-              updateGuestSession({});
-              safeSetSessionItem("onboarding_complete", "true");
-              navigate("/");
-            }}
-            className="text-sm font-medium transition-colors"
-            style={{ color: MIDNIGHT_BLACK }}
-          >
-            {isHe ? "או המשך כאורח →" : "Continue as Guest"}
-          </button>
-        </div>
       </div>
     </div>
   );

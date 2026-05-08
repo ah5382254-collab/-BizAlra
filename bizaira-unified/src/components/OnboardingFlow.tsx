@@ -108,7 +108,7 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
         backgroundImage: "radial-gradient(circle at top right, rgba(0,0,0,0.02) 1px, transparent 1px), radial-gradient(circle at bottom left, rgba(0,0,0,0.02) 1px, transparent 1px)",
         backgroundSize: "72px 72px, 96px 96px",
       }}
-      dir="ltr"
+      dir={isHe ? "rtl" : "ltr"}
     >
       <div className="w-full max-w-2xl" style={{
         borderRadius: "24px",
@@ -121,7 +121,7 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
 
         {/* ─── Screen 1: Greeting ─── */}
         {step === "greeting" && (
-          <div className="text-center animate-fade-in" dir="ltr">
+          <div className="text-center animate-fade-in" dir={isHe ? "rtl" : "ltr"}>
             <h1 className="mb-4" style={{ color: NAVY, fontFamily: "'Playfair Display', serif", fontSize: '2.2rem', fontWeight: 700, lineHeight: 1.3, letterSpacing: '-0.5px' }}>
               {t("onboarding.greeting.title")}
             </h1>
@@ -167,7 +167,7 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
         {/* ─── Screen 2: Language Selection ─── */}
         {step === "language" && (
           <div className="animate-fade-in">
-            <StepHeader num={1} total={4} title="Which language do you prefer?" isHe={isHe} />
+            <StepHeader num={1} total={4} stepLabel={t("onboarding.stepCounter", { num: 1, total: 4 })} title={t("onboarding.language.title")} isHe={isHe} />
             
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "32px" }}>
               {languageOptions.map((option) => {
@@ -260,7 +260,7 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
         {/* ─── Screen 3: Business Type ─── */}
         {step === "business" && (
           <div className="animate-fade-in">
-            <StepHeader num={2} total={4} title={t("onboarding.business.title")} isHe={isHe} />
+            <StepHeader num={2} total={4} stepLabel={t("onboarding.stepCounter", { num: 2, total: 4 })} title={t("onboarding.business.title")} isHe={isHe} />
             
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", marginBottom: "32px" }}>
               {businessTypes.map(({ label, Icon }) => {
@@ -405,7 +405,7 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
         {/* ─── Screen 4: Audience ─── */}
         {step === "audience" && (
           <div className="animate-fade-in">
-            <StepHeader num={3} total={4} title={t("onboarding.audience.title")} isHe={isHe} />
+            <StepHeader num={3} total={4} stepLabel={t("onboarding.stepCounter", { num: 3, total: 4 })} title={t("onboarding.audience.title")} isHe={isHe} />
             
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "32px" }}>
               {audiences.map(({ label, Icon }) => {
@@ -550,7 +550,7 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
         {/* ─── Screen 5: Goal ─── */}
         {step === "goal" && (
           <div className="animate-fade-in">
-            <StepHeader num={4} total={4} title={t("onboarding.goal.title")} isHe={isHe} />
+            <StepHeader num={4} total={4} stepLabel={t("onboarding.stepCounter", { num: 4, total: 4 })} title={t("onboarding.goal.title")} isHe={isHe} />
             
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "32px" }}>
               {goals.map(({ label, Icon }) => {
@@ -669,7 +669,7 @@ const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
   );
 };
 
-const StepHeader = ({ num, total, title, isHe }: { num: number; total: number; title: string; isHe?: boolean }) => (
+const StepHeader = ({ num, total, stepLabel, title, isHe }: { num: number; total: number; stepLabel: string; title: string; isHe?: boolean }) => (
   <div style={{ marginBottom: "32px" }}>
     <div style={{ display: "flex", gap: "8px", marginBottom: "16px" }}>
       {Array.from({ length: total }, (_, i) => (
@@ -694,7 +694,7 @@ const StepHeader = ({ num, total, title, isHe }: { num: number; total: number; t
       marginBottom: "8px",
       fontFamily: "'Montserrat', sans-serif",
     }}>
-      Step {num} of {total}
+      {stepLabel}
     </p>
     <h2 style={{
       fontSize: "1.5rem",

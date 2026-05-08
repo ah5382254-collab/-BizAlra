@@ -39,23 +39,23 @@ const OnboardingPage = () => {
   const features = [
     {
       icon: Wand2,
-      title: lang === "he" ? "יצירת תוכן שיווקי" : "Marketing Content Creation",
-      desc: lang === "he" ? "תמונות מוצר, ניסוחים מקצועיים ותוכן שיווקי בלחיצה" : "Product photos, professional copy and marketing content in one click",
+      title: t("onboarding.page.features.title.marketing"),
+      desc: t("onboarding.page.features.desc.marketing"),
     },
     {
       icon: BarChart3,
-      title: lang === "he" ? "ניתוח עסקי חכם" : "Smart Business Analytics",
-      desc: lang === "he" ? "תובנות, רווחיות וחיזוי — כמו יועץ עסקי אישי" : "Insights, profitability and forecasting — like a personal business advisor",
+      title: t("onboarding.page.features.title.analytics"),
+      desc: t("onboarding.page.features.desc.analytics"),
     },
     {
       icon: MessageSquare,
-      title: lang === "he" ? "ניסוח הודעות AI" : "AI Message Writing",
-      desc: lang === "he" ? "הודעות מכירה, שירות ופוסטים ברמת קופירייטר" : "Sales, service and social messages at copywriter level",
+      title: t("onboarding.page.features.title.messages"),
+      desc: t("onboarding.page.features.desc.messages"),
     },
     {
       icon: Camera,
-      title: lang === "he" ? "סטודיו תמונות" : "Photo Studio",
-      desc: lang === "he" ? "תמונות מוצר ברמת צלם מקצועי, מוכנות לשיווק" : "Professional photographer-level product photos, marketing-ready",
+      title: t("onboarding.page.features.title.photos"),
+      desc: t("onboarding.page.features.desc.photos"),
     },
   ];
 
@@ -83,7 +83,7 @@ const OnboardingPage = () => {
             <div className="flex items-center gap-2 mb-4">
               <Briefcase size={20} className="text-primary" />
               <h2 className="text-lg font-bold text-foreground" style={{fontFamily: "'Montserrat', sans-serif", fontWeight: 700}}>
-                {lang === "he" ? "מה סוג העסק שלך?" : "What type of business do you have?"}
+                {t("onboarding.page.business.title")}
               </h2>
             </div>
             <div className="grid grid-cols-2 gap-2">
@@ -108,7 +108,7 @@ const OnboardingPage = () => {
               className="w-full gradient-glow text-primary-foreground font-bold py-3 rounded-2xl mt-5 flex items-center justify-center gap-2 hover:scale-[1.02] transition-all disabled:opacity-40 disabled:hover:scale-100"
               style={{fontFamily: "'Montserrat', sans-serif"}}
             >
-              {lang === "he" ? "המשך" : "Continue"}
+              {t("onboarding.continue")}
               <NextArrow size={16} />
             </button>
           </div>
@@ -120,14 +120,14 @@ const OnboardingPage = () => {
             <div className="flex items-center gap-2 mb-4">
               <User size={20} className="text-primary" />
               <h2 className="text-lg font-bold text-foreground" style={{fontFamily: "'Montserrat', sans-serif", fontWeight: 700}}>
-                {lang === "he" ? "מה השם שלך?" : "What's your name?"}
+                {t("onboarding.page.name.title")}
               </h2>
             </div>
             <input
               type="text"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
-              placeholder={lang === "he" ? "השם שלך" : "Your name"}
+              placeholder={t("onboarding.page.name.placeholder")}
               className="w-full bg-background border border-border rounded-xl px-4 py-3 text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
               style={{fontFamily: "'Montserrat', sans-serif"}}
               autoFocus
@@ -145,7 +145,7 @@ const OnboardingPage = () => {
                 className="flex-1 gradient-glow text-primary-foreground font-bold py-3 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-all disabled:opacity-40 disabled:hover:scale-100"
                 style={{fontFamily: "'Montserrat', sans-serif"}}
               >
-                {lang === "he" ? "המשך" : "Continue"}
+                {t("onboarding.continue")}
                 <NextArrow size={16} />
               </button>
             </div>
@@ -158,13 +158,13 @@ const OnboardingPage = () => {
             <div className="flex items-center gap-2 mb-4">
               <Mail size={20} className="text-primary" />
               <h2 className="text-lg font-bold text-foreground" style={{fontFamily: "'Montserrat', sans-serif", fontWeight: 700}}>
-                {lang === "he" ? "התחברות באמצעות אימייל" : "Sign in with email"}
+                {t("onboarding.page.login.title")}
               </h2>
             </div>
             <div className="space-y-3">
               <div>
                 <label className="text-xs font-semibold text-muted-foreground mb-1 block" style={{fontFamily: "'Montserrat', sans-serif"}}>
-                  {lang === "he" ? "אימייל" : "Email"}
+                  {t("auth.emailLabel")}
                 </label>
                 <div className="relative">
                   <Mail size={14} className="absolute end-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -182,7 +182,7 @@ const OnboardingPage = () => {
               </div>
               <div>
                 <label className="text-xs font-semibold text-muted-foreground mb-1 block" style={{fontFamily: "'Montserrat', sans-serif"}}>
-                  {lang === "he" ? "סיסמה" : "Password"}
+                  {t("auth.passwordLabel")}
                 </label>
                 <div className="relative">
                   <Lock size={14} className="absolute end-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -212,7 +212,7 @@ const OnboardingPage = () => {
                 style={{fontFamily: "'Montserrat', sans-serif"}}
               >
                 <Sparkles size={16} />
-                {lang === "he" ? "צור חשבון" : "Create Account"}
+                {t("auth.createAccount")}
               </button>
             </div>
           </div>
@@ -223,12 +223,10 @@ const OnboardingPage = () => {
           <div className="animate-float-up">
             <div className="text-center mb-6">
               <h2 className="text-3xl font-bold text-foreground mb-2" style={{fontFamily: "'Playfair Display', serif", color: "#001830"}}>
-                {lang === "he" ? `ברוך הבא, ${userName}!` : `Welcome, ${userName}!`}
+                {t("onboarding.page.welcomeUser").replace("{{userName}}", userName)}
               </h2>
               <p className="text-sm text-muted-foreground" style={{fontFamily: "'Montserrat', sans-serif"}}>
-                {lang === "he"
-                  ? "BizAIra היא מערכת AI שיוצרת לעסק שלך תוכן שיווקי מקצועי — בלחיצה."
-                  : "BizAIra is an AI system that creates professional marketing content for your business — in one click."}
+                {t("onboarding.page.features.welcome")}
               </p>
             </div>
 
@@ -259,7 +257,7 @@ const OnboardingPage = () => {
               style={{fontFamily: "'Montserrat', sans-serif"}}
             >
               <SparkleIcon size={16} />
-              {lang === "he" ? "בואו נתחיל!" : "Let's get started!"}
+              {t("onboarding.page.getStarted")}
             </button>
           </div>
         )}

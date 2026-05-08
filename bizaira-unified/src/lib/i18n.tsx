@@ -515,12 +515,63 @@ const translations: Translations = {
   "onboarding.audienceInfo.excellent": { he: "מעולה!", en: "Excellent!" },
   "onboarding.businessInfo.confirmationDescription": { he: "נתאים את כל דבר עבורך בתחום ה{{businessType}} — תוכן מדויק, תמונות מדהימות, וניסוחים שדוברים בשפת הלקוחות שלך.", en: "We'll tailor everything in the {{businessType}} space — precise content, stunning photos, and copy that speaks to your customers." },
   "onboarding.audienceInfo.description": { he: "נבנה חוויית משתמש מושלמת עבור {{audience}} — תוכן שמדבר אליהם, עיצוב שמושך אותם, וחוויה שגורמת להם לחזור.", en: "We'll create a perfect user experience for {{audience}} — content that speaks to them, design that attracts them, and an experience that brings them back." },
+  "onboarding.page.business.title": { he: "מה סוג העסק שלך?", en: "What type of business do you have?" },
+  "onboarding.page.name.title": { he: "מה השם שלך?", en: "What's your name?" },
+  "onboarding.page.name.placeholder": { he: "השם שלך", en: "Your name" },
+  "onboarding.page.login.title": { he: "התחברות באמצעות אימייל", en: "Sign in with email" },
+  "onboarding.page.features.welcome": { he: "BizAIra היא מערכת AI שיוצרת לעסק שלך תוכן שיווקי מקצועי — בלחיצה.", en: "BizAIra is an AI system that creates professional marketing content for your business — in one click." },
+  "onboarding.page.features.title.marketing": { he: "יצירת תוכן שיווקי", en: "Marketing Content Creation" },
+  "onboarding.page.features.desc.marketing": { he: "תמונות מוצר, ניסוחים מקצועיים ותוכן שיווקי בלחיצה", en: "Product photos, professional copy and marketing content in one click" },
+  "onboarding.page.features.title.analytics": { he: "ניתוח עסקי חכם", en: "Smart Business Analytics" },
+  "onboarding.page.features.desc.analytics": { he: "תובנות, רווחיות וחיזוי — כמו יועץ עסקי אישי", en: "Insights, profitability and forecasting — like a personal business advisor" },
+  "onboarding.page.features.title.messages": { he: "ניסוח הודעות AI", en: "AI Message Writing" },
+  "onboarding.page.features.desc.messages": { he: "הודעות מכירה, שירות ופוסטים ברמת קופירייטר", en: "Sales, service and social messages at copywriter level" },
+  "onboarding.page.features.title.photos": { he: "סטודיו תמונות", en: "Photo Studio" },
+  "onboarding.page.features.desc.photos": { he: "תמונות מוצר ברמת צלם מקצועי, מוכנות לשיווק", en: "Professional photographer-level product photos, marketing-ready" },
+  "onboarding.page.welcomeUser": { he: "ברוך הבא, {{userName}}!", en: "Welcome, {{userName}}!" },
+  "onboarding.page.getStarted": { he: "בואו נתחיל!", en: "Let's get started!" },
+  "onboarding.page.skip": { he: "דלג", en: "Skip" },
+  "onboarding.page.continue": { he: "המשך", en: "Continue" },
+  "onboarding.language.title": { he: "איזו שפה אתה מעדיף?", en: "Which language do you prefer?" },
+  "onboarding.stepCounter": { he: "שלב {{num}} מתוך {{total}}", en: "Step {{num}} of {{total}}" },
+  "onboarding.slides.skip": { he: "דלג", en: "Skip" },
+  "onboarding.slides.title1": { he: "ברוכים הבאים ל-BizAIra", en: "Welcome to BizAIra" },
+  "onboarding.slides.desc1": { he: "הכלי הכי פשוט ונוח ליצירת תוכן מקצועי לעסק שלך. בלי ידע טכני, בלי מאמץ — פשוט מתחילים ומקבלים תוצאות.", en: "The easiest and most intuitive way to create professional content for your business. No technical skills needed — just start and get results." },
+  "onboarding.slides.title2": { he: "הכל מוכן בשבילך", en: "Everything Ready for You" },
+  "onboarding.slides.desc2": { he: "תמונות מוצר, טקסטים שיווקיים ועוד — הכל נוצר אוטומטית ומותאם בדיוק לעסק שלך, בכמה לחיצות בלבד.", en: "Product photos, marketing texts, business analytics and more — all created automatically and tailored exactly to your business, in just a few clicks." },
+  "onboarding.slides.title3": { he: "פשוט, מהיר ונעים", en: "Simple, Fast & Enjoyable" },
+  "onboarding.slides.desc3": { he: "כל פעולה באפליקציה מרגישה קלה וטבעית. אין תפריטים מסובכים, אין בלבול — רק חוויה חלקה מהתחלה ועד הסוף.", en: "Every action in the app feels light and natural. No complicated menus, no confusion — just a smooth experience from start to finish." },
+  "auth.gateway.joinToday": { he: "הצטרף היום כדי להתחיל.", en: "Join today to get started." },
+  "auth.gateway.startNow": { he: "התחל עכשיו", en: "Start Now" },
+  "auth.gateway.signInToContinue": { he: "התחבר כדי להמשיך", en: "Sign in to continue" },
+  "auth.gateway.openAccount": { he: "פתח את החשבון שלך כדי לשמור ולנהל את היצירות", en: "Open your account to save and manage creations" },
+  "auth.gateway.fullName": { he: "שם מלא", en: "Full Name" },
+  "auth.gateway.phoneNumber": { he: "מספר טלפון", en: "Phone Number" },
+  "auth.gateway.email": { he: "אימייל", en: "Email" },
+  "auth.gateway.password": { he: "סיסמה", en: "Password" },
+  "auth.gateway.privacyAgreement": { he: "אני מסכים למדיניות האבטחה ותנאי השירות (כולל העלאת תוכן ותמונות).", en: "I agree to the security policy and terms of service (allowing content and image uploads)." },
+  "auth.gateway.continueAsGuest": { he: "או המשך כאורח →", en: "Continue as Guest" },
+  "auth.gateway.error.fillAllFields": { he: "נא למלא את כל השדות", en: "Please fill in all fields" },
+  "auth.gateway.error.acceptSecurityPolicy": { he: "אנא קבל את מדיניות האבטחה", en: "Please accept the security policy" },
+  "auth.gateway.error.fillEmailPassword": { he: "נא למלא אימייל וסיסמה", en: "Please fill in email and password" },
+  "auth.gateway.success.login": { he: "התחברת בהצלחה!", en: "Logged in successfully!" },
+  "auth.gateway.success.signup": { he: "החשבון נוצר! בדוק את האימייל שלך", en: "Account created! Check your email" },
+  "auth.gateway.auth.signup": { he: "צור חשבון", en: "Create Account" },
+  "auth.gateway.auth.login": { he: "התחבר", en: "Log In" },
+  "auth.gateway.loginPrompt": { he: "כבר נרשמת? להתחברות", en: "Already registered? Log in" },
+  "auth.gateway.signupPrompt": { he: "אין לך חשבון? הירשם כאן", en: "No account? Sign up here" },
+  "auth.gateway.toggle.noAccount": { he: "אין לך חשבון? הרשם כאן", en: "No account? Sign up here" },
+  "auth.gateway.toggle.haveAccount": { he: "כבר יש לך חשבון? התחבר כאן", en: "Already have an account? Login here" },
+  "auth.gateway.google": { he: "המשך עם גוגל", en: "Continue with Google" },
+  "auth.gateway.privacyPolicy": { he: "מדיניות הפרטיות", en: "Privacy Policy" },
+  "auth.gateway.termsOfUse": { he: "תנאי השימוש", en: "Terms of Use" },
+  "auth.gateway.marketingAgreement": { he: "אני מסכים לקבל תוכן שיווקי", en: "I agree to receive marketing content" },
 };
 
 interface I18nContextType {
   lang: Lang;
   setLang: (lang: Lang) => void;
-  t: (key: string) => string;
+  t: (key: string, params?: Record<string, string | number>) => string;
   dir: "rtl" | "ltr";
 }
 
@@ -540,18 +591,25 @@ export const I18nProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     safeSetItem("bizaira_language", lang);
     document.documentElement.dir = lang === "he" ? "rtl" : "ltr";
+    document.body.dir = lang === "he" ? "rtl" : "ltr";
     document.documentElement.lang = lang;
   }, [lang]);
 
-  const t = (key: string): string => {
-    return translations[key]?.[lang] || key;
+  const t = (key: string, params?: Record<string, string | number>): string => {
+    let translation = translations[key]?.[lang] || key;
+    if (params) {
+      Object.entries(params).forEach(([param, value]) => {
+        translation = translation.replace(new RegExp(`{{${param}}}`, "g"), String(value));
+      });
+    }
+    return translation;
   };
 
   const dir = lang === "he" ? "rtl" : "ltr";
 
   return (
     <I18nContext.Provider value={{ lang, setLang, t, dir }}>
-      <div className={lang === "en" ? "font-display" : "font-heebo"}>
+      <div dir={dir} lang={lang} className={`${lang === "en" ? "font-display text-left" : "font-heebo text-right"}`}>
         {children}
       </div>
     </I18nContext.Provider>
