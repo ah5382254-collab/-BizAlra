@@ -7,27 +7,22 @@ import { useI18n } from "@/lib/i18n";
 import { getGuestSession } from "@/lib/guest-session";
 import { safeGetSessionItem } from "@/lib/safe-storage";
 
-const BUSINESS_TYPES_HE = [
-  "קוסמטיקה וטיפוח", "עיצוב פנים", "צילום", "מאמנת עסקית",
-  "מעצבת גרפית", "מטפלת", "חנות אונליין", "מסעדה / קייטרינג",
-  "עורכת דין", "רואת חשבון", "אחר",
-];
-const BUSINESS_TYPES_EN = [
-  "Beauty & Cosmetics", "Interior Design", "Photography", "Business Coach",
-  "Graphic Designer", "Therapist", "Online Store", "Restaurant / Catering",
-  "Attorney", "Accountant", "Other",
-];
+const BUSINESS_TYPE_KEYS = [
+  "fashion", "food", "beauty", "realEstate", "digital", "services", "health", "education", "other",
+] as const;
+
+type BusinessTypeKey = (typeof BUSINESS_TYPE_KEYS)[number];
 
 const OnboardingPage = () => {
   const { t, lang } = useI18n();
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
-  const [businessType, setBusinessType] = useState("");
+  const [businessType, setBusinessType] = useState<BusinessTypeKey | "">("");
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const businessTypes = lang === "he" ? BUSINESS_TYPES_HE : BUSINESS_TYPES_EN;
+  const businessTypes = BUSINESS_TYPE_KEYS.map((key) => ({ key, label: t(`onboarding.business.${key}`) }));
   const BackArrow = lang === "he" ? ArrowLeft : ArrowRight;
   const NextArrow = lang === "he" ? ArrowRight : ArrowLeft;
 
@@ -89,16 +84,16 @@ const OnboardingPage = () => {
             <div className="grid grid-cols-2 gap-2">
               {businessTypes.map((type) => (
                 <button
-                  key={type}
-                  onClick={() => setBusinessType(type)}
+                  key={type.key}
+                  onClick={() => setBusinessType(type.key)}
                   className={`text-sm rounded-xl px-3 py-2.5 border transition-all text-start ${
-                    businessType === type
+                    businessType === type.key
                       ? "border-primary bg-secondary text-foreground font-semibold"
                       : "border-border bg-background text-muted-foreground hover:border-primary/30"
                   }`}
                   style={{fontFamily: "'Montserrat', sans-serif"}}
                 >
-                  {type}
+                  {type.label}
                 </button>
               ))}
             </div>

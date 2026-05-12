@@ -25,11 +25,11 @@ const AuthSection = ({ onSuccess }: AuthSectionProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
-      toast.error(lang === "he" ? "נא למלא אימייל וסיסמה" : "Please fill in email and password");
+      toast.error(t("auth.gateway.error.fillEmailPassword"));
       return;
     }
     if (!isLogin && !acceptPrivacy) {
-      toast.error(lang === "he" ? "נא לאשר את מדיניות הפרטיות" : "Please accept the privacy policy");
+      toast.error(t("auth.gateway.error.acceptSecurityPolicy"));
       return;
     }
     setLoading(true);
@@ -37,7 +37,7 @@ const AuthSection = ({ onSuccess }: AuthSectionProps) => {
       if (isLogin) {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        toast.success(lang === "he" ? "התחברת בהצלחה!" : "Logged in successfully!");
+        toast.success(t("auth.gateway.success.login"));
         if (onSuccess) onSuccess();
         else navigate("/");
       } else {
@@ -54,7 +54,7 @@ const AuthSection = ({ onSuccess }: AuthSectionProps) => {
           },
         });
         if (error) throw error;
-        toast.success(lang === "he" ? "החשבון נוצר! בדוק את האימייל שלך" : "Account created! Check your email");
+        toast.success(t("auth.gateway.success.signup"));
       }
     } catch (error: any) {
       toast.error(error.message || "Something went wrong");
@@ -82,9 +82,7 @@ const AuthSection = ({ onSuccess }: AuthSectionProps) => {
       <div className="text-center mb-6">
         <h2 className="text-2xl font-extrabold gradient-glow-text mb-1">BizAIra</h2>
         <p className="text-muted-foreground text-sm">
-          {isLogin
-            ? (lang === "he" ? "שמחים לראות אותך שוב" : "Welcome back")
-            : (lang === "he" ? "הצטרפו לסטודיו AI" : "Join the AI Studio")}
+          {isLogin ? t("auth.gateway.welcomeBack") : t("auth.gateway.joinAIStudio")}
         </p>
       </div>
 
@@ -92,7 +90,7 @@ const AuthSection = ({ onSuccess }: AuthSectionProps) => {
         {!isLogin && (
           <div>
             <label className="text-xs font-semibold text-muted-foreground mb-1.5 block">
-              {lang === "he" ? "שם מלא" : "Full Name"}
+              {t("auth.gateway.fullName")}
             </label>
             <div className="relative">
               <User size={15} className={`absolute ${lang === "he" ? "left-3" : "right-3"} top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none`} />
@@ -100,7 +98,7 @@ const AuthSection = ({ onSuccess }: AuthSectionProps) => {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder={lang === "he" ? "השם שלך" : "Your name"}
+                placeholder={t("auth.gateway.fullName")}
                 className={`w-full h-11 bg-background border border-input rounded-xl ${lang === "he" ? "pl-10 pr-4" : "pr-10 pl-4"} text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring/40 transition-all`}
                 dir={lang === "he" ? "rtl" : "ltr"}
               />
@@ -109,7 +107,7 @@ const AuthSection = ({ onSuccess }: AuthSectionProps) => {
         )}
         <div>
           <label className="text-xs font-semibold text-muted-foreground mb-1.5 block">
-            {lang === "he" ? "אימייל" : "Email"}
+            {t("auth.gateway.email")}
           </label>
           <div className="relative">
             <Mail size={15} className={`absolute ${lang === "he" ? "left-3" : "right-3"} top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none`} />
@@ -125,7 +123,7 @@ const AuthSection = ({ onSuccess }: AuthSectionProps) => {
         </div>
         <div>
           <label className="text-xs font-semibold text-muted-foreground mb-1.5 block">
-            {lang === "he" ? "סיסמה" : "Password"}
+            {t("auth.gateway.password")}
           </label>
           <div className="relative">
             <Lock size={15} className={`absolute ${lang === "he" ? "left-3" : "right-3"} top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none`} />
@@ -150,11 +148,11 @@ const AuthSection = ({ onSuccess }: AuthSectionProps) => {
                 className="mt-1"
               />
               <label htmlFor="privacy" className={`text-sm leading-relaxed ${lang === "he" ? "text-right" : ""}`}>
-                {lang === "he" ? "אני מסכים ל" : "I agree to the"}{" "}
+                {t("auth.gateway.privacyAgreement")} {" "}
                 <Link to="/privacy" className="text-primary underline hover:text-primary/80">
-                  {lang === "he" ? "מדיניות הפרטיות" : "Privacy Policy"}
+                  {t("auth.gateway.privacyPolicy")}
                 </Link>{" "}
-                {lang === "he" ? "ותנאי השימוש" : "and Terms of Use"}
+                {t("auth.gateway.termsOfUse")}
               </label>
             </div>
             <div className="flex items-start space-x-2">
@@ -165,7 +163,7 @@ const AuthSection = ({ onSuccess }: AuthSectionProps) => {
                 className="mt-1"
               />
               <label htmlFor="marketing" className={`text-sm leading-relaxed ${lang === "he" ? "text-right" : ""}`}>
-                {lang === "he" ? "אני מסכים לקבל תוכן שיווקי" : "I agree to receive marketing content"}
+                {t("auth.gateway.marketingAgreement")}
               </label>
             </div>
           </div>
@@ -178,8 +176,8 @@ const AuthSection = ({ onSuccess }: AuthSectionProps) => {
         >
           {loading ? <Loader2 size={18} className="animate-spin" /> : <Sparkles size={18} />}
           {isLogin
-            ? (lang === "he" ? "התחבר" : "Log In")
-            : (lang === "he" ? "צור חשבון" : "Create Account")}
+            ? t("auth.gateway.auth.login")
+            : t("auth.gateway.auth.signup")}
         </button>
 
         <div className="relative my-4">
@@ -188,7 +186,7 @@ const AuthSection = ({ onSuccess }: AuthSectionProps) => {
           </div>
           <div className="relative flex justify-center text-xs uppercase">
             <span className="bg-background px-2 text-muted-foreground">
-              {lang === "he" ? "או" : "Or"}
+              {t("auth.gateway.or")}
             </span>
           </div>
         </div>
@@ -204,14 +202,14 @@ const AuthSection = ({ onSuccess }: AuthSectionProps) => {
             <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
             <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
           </svg>
-          {lang === "he" ? "המשך עם גוגל" : "Continue with Google"}
+          {t("auth.gateway.google")}
         </button>
 
         <div className="text-center pt-1">
           <button type="button" onClick={() => setIsLogin(!isLogin)} className="text-sm text-accent hover:text-accent/80 transition-colors">
             {isLogin
-              ? (lang === "he" ? "אין לך חשבון? הירשם" : "Don't have an account? Sign up")
-              : (lang === "he" ? "כבר יש לך חשבון? התחבר" : "Already have an account? Log in")}
+              ? t("auth.gateway.toggle.noAccount")
+              : t("auth.gateway.toggle.haveAccount")}
           </button>
         </div>
       </form>

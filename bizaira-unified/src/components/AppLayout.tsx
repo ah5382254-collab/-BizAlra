@@ -2,8 +2,8 @@ import { ReactNode, useState } from "react";
 import BottomNav from "./BottomNav";
 import CookieSettings from "./CookieSettings";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Home, Wand2, HelpCircle, User } from "lucide-react";
-import { useI18n } from "@/lib/i18n";
+import { Menu, X, Home, Wand2, HelpCircle, User, Clock } from "lucide-react";
+import { useI18n, LanguageToggle } from "@/lib/i18n";
 import { useAuth } from "@/hooks/useAuth";
 import { getActivityStats } from "@/lib/activity-tracker";
 
@@ -37,7 +37,7 @@ const Layout = ({ children }: LayoutProps) => {
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-primary-foreground px-4 py-2 rounded z-50"
       >
-        דלג לתוכן העיקרי / Skip to main content
+        {t("app.skipToContent")}
       </a>
 
       {/* Mobile hamburger menu */}
@@ -45,10 +45,14 @@ const Layout = ({ children }: LayoutProps) => {
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           className="bg-white/80 backdrop-blur-sm border border-gray-200 rounded-lg p-2 shadow-sm"
-          aria-label={menuOpen ? "סגור תפריט" : "פתח תפריט"}
+          aria-label={menuOpen ? t("nav.close") : t("nav.menu")}
         >
           {menuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
+      </div>
+
+      <div className={`fixed top-3 z-50 ${isHe ? "left-3" : "right-3"}`}>
+        <LanguageToggle />
       </div>
 
       {/* Mobile side menu */}
@@ -57,8 +61,8 @@ const Layout = ({ children }: LayoutProps) => {
           <div className="fixed right-0 top-0 h-full w-64 bg-white shadow-lg" onClick={(e) => e.stopPropagation()}>
             <div className="p-4">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-semibold">תפריט</h2>
-                <button onClick={closeMenu} className="p-1">
+                <h2 className="text-lg font-semibold">{t("nav.menu")}</h2>
+                <button onClick={closeMenu} className="p-1" aria-label={t("nav.close")}>
                   <X size={20} />
                 </button>
               </div>
@@ -122,7 +126,7 @@ const Layout = ({ children }: LayoutProps) => {
       <footer className="bg-white border-t border-gray-100 py-2 px-4 text-center">
         <div className="flex justify-center items-center gap-4">
           <Link to="/accessibility" className="text-xs text-gray-500 hover:text-gray-700">
-            הצהרת נגישות
+            {t("footer.accessibility")}
           </Link>
           <CookieSettings />
         </div>
