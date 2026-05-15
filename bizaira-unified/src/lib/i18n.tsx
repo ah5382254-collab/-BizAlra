@@ -658,6 +658,11 @@ const translations: Translations = {
   "auth.gateway.google": { he: "המשך עם גוגל", en: "Continue with Google" },
   "auth.gateway.privacyPolicy": { he: "מדיניות הפרטיות", en: "Privacy Policy" },
   "auth.gateway.termsOfUse": { he: "תנאי השימוש", en: "Terms of Use" },
+  "auth.googleLoginSuccess": { he: "התחברת בהצלחה עם Google", en: "Successfully logged in with Google" },
+  "auth.googleLoginFailed": { he: "התחברות עם Google נכשלה", en: "Google login failed" },
+  "auth.googleLoginError": { he: "שגיאה בהתחברות עם Google. אנא נסה שוב.", en: "Error logging in with Google. Please try again." },
+  "auth.googleUserNotFound": { he: "משתמש זה לא נמצא. אנא נסה להירשם.", en: "User not found. Please try signing up." },
+  "auth.googleLoginCancelled": { he: "התחברות עם Google בוטלה", en: "Google login cancelled" },
   "auth.gateway.marketingAgreement": { he: "אני מסכים לקבל תוכן שיווקי", en: "I agree to receive marketing content" },
 };
 

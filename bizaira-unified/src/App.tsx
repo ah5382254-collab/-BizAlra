@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -80,52 +81,54 @@ const App = () => {
   };
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <I18nProvider>
-          <AuthProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/auth" element={<AuthPage />} />
-                <Route path="/onboarding-welcome" element={<OnboardingWelcome />} />
-                <Route path="/onboarding" element={<OnboardingPage />} />
+    <GoogleOAuthProvider clientId="1023943507073-o7fjk67sribqj66qmli7rj63q69hbvsg.apps.googleusercontent.com">
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <I18nProvider>
+            <AuthProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/auth" element={<AuthPage />} />
+                  <Route path="/onboarding-welcome" element={<OnboardingWelcome />} />
+                  <Route path="/onboarding" element={<OnboardingPage />} />
 
-                <Route path="/admin/pages" element={<AdminLayout><AdminPagesPage /></AdminLayout>} />
-                <Route path="/admin/media" element={<AdminLayout><AdminMediaPage /></AdminLayout>} />
-                <Route path="/admin/components" element={<AdminLayout><AdminComponentsPage /></AdminLayout>} />
-                <Route path="/admin/ai" element={<AdminLayout><AdminAIPage /></AdminLayout>} />
-                <Route path="/admin/users" element={<AdminLayout><AdminUsersPage /></AdminLayout>} />
-                <Route path="/admin/settings" element={<AdminLayout><AdminSettingsPage /></AdminLayout>} />
+                  <Route path="/admin/pages" element={<AdminLayout><AdminPagesPage /></AdminLayout>} />
+                  <Route path="/admin/media" element={<AdminLayout><AdminMediaPage /></AdminLayout>} />
+                  <Route path="/admin/components" element={<AdminLayout><AdminComponentsPage /></AdminLayout>} />
+                  <Route path="/admin/ai" element={<AdminLayout><AdminAIPage /></AdminLayout>} />
+                  <Route path="/admin/users" element={<AdminLayout><AdminUsersPage /></AdminLayout>} />
+                  <Route path="/admin/settings" element={<AdminLayout><AdminSettingsPage /></AdminLayout>} />
 
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/create" element={<AppLayout><CreatePage /></AppLayout>} />
-                <Route path="/journal" element={<AppLayout><JournalPage /></AppLayout>} />
-                
-                <Route path="/create/product-photos" element={<AppLayout><ProductPhotoStudioPage /></AppLayout>} />
-                <Route path="/create/messages" element={<AppLayout><AIMessagesPage /></AppLayout>} />
-                <Route path="/create/analytics" element={<AppLayout><BusinessAnalyticsPage /></AppLayout>} />
-                <Route path="/create/time" element={<AppLayout><TimeOptimizerPage /></AppLayout>} />
-                <Route path="/create/pricing" element={<AppLayout><PricingStrategistPage /></AppLayout>} />
-                <Route path="/create/image-studio" element={<AppLayout><ImageStudioPage /></AppLayout>} />
-                <Route path="/create/video" element={<AppLayout><VideoStudioPage /></AppLayout>} />
-                <Route path="/dashboard" element={<AppLayout><DashboardPage /></AppLayout>} />
-                <Route path="/profile" element={<AppLayout><ProfilePage /></AppLayout>} />
-                <Route path="/pricing" element={<AppLayout><PricingPage /></AppLayout>} />
-                <Route path="/support" element={<AppLayout><SupportPage /></AppLayout>} />
-              <Route path="/accessibility" element={<AppLayout><AccessibilityStatement /></AppLayout>} />
-              <Route path="/privacy" element={<AppLayout><PrivacyPolicy /></AppLayout>} />
-              <Route path="/terms" element={<AppLayout><TermsOfUse /></AppLayout>} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-              {showConsent && <CookieConsentPopup onConsent={handleConsent} />}
-            </BrowserRouter>
-          </AuthProvider>
-        </I18nProvider>
-      </TooltipProvider>
-      <AccessibilityWidget />
-    </QueryClientProvider>
+                  <Route path="/" element={<LandingPage />} />
+                  <Route path="/create" element={<AppLayout><CreatePage /></AppLayout>} />
+                  <Route path="/journal" element={<AppLayout><JournalPage /></AppLayout>} />
+                  
+                  <Route path="/create/product-photos" element={<AppLayout><ProductPhotoStudioPage /></AppLayout>} />
+                  <Route path="/create/messages" element={<AppLayout><AIMessagesPage /></AppLayout>} />
+                  <Route path="/create/analytics" element={<AppLayout><BusinessAnalyticsPage /></AppLayout>} />
+                  <Route path="/create/time" element={<AppLayout><TimeOptimizerPage /></AppLayout>} />
+                  <Route path="/create/pricing" element={<AppLayout><PricingStrategistPage /></AppLayout>} />
+                  <Route path="/create/image-studio" element={<AppLayout><ImageStudioPage /></AppLayout>} />
+                  <Route path="/create/video" element={<AppLayout><VideoStudioPage /></AppLayout>} />
+                  <Route path="/dashboard" element={<AppLayout><DashboardPage /></AppLayout>} />
+                  <Route path="/profile" element={<AppLayout><ProfilePage /></AppLayout>} />
+                  <Route path="/pricing" element={<AppLayout><PricingPage /></AppLayout>} />
+                  <Route path="/support" element={<AppLayout><SupportPage /></AppLayout>} />
+                  <Route path="/accessibility" element={<AppLayout><AccessibilityStatement /></AppLayout>} />
+                  <Route path="/privacy" element={<AppLayout><PrivacyPolicy /></AppLayout>} />
+                  <Route path="/terms" element={<AppLayout><TermsOfUse /></AppLayout>} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+                {showConsent && <CookieConsentPopup onConsent={handleConsent} />}
+              </BrowserRouter>
+            </AuthProvider>
+          </I18nProvider>
+        </TooltipProvider>
+        <AccessibilityWidget />
+      </QueryClientProvider>
+    </GoogleOAuthProvider>
   );
 };
 
