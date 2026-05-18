@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "@/lib/i18n";
+import { useAuth } from "@/hooks/useAuth";
 import { generateStudioImage } from "@/lib/ai-service";
 import { getActivityStats, trackCreation, trackDownload } from "@/lib/activity-tracker";
 import SparkleIcon from "@/components/SparkleIcon";
@@ -58,7 +59,9 @@ const ImageStudioPage = () => {
   const [results, setResults] = useState<string[]>([]);
   const [activeResult, setActiveResult] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [showAuthGuard, setShowAuthGuard] = useState(false);
 
+  const { user } = useAuth();
   const [imageType, setImageType] = useState<ImageType>("product");
   const [style, setStyle] = useState<StyleId>("realistic");
   const [bgColor, setBgColor] = useState("#ffffff");
@@ -82,6 +85,10 @@ const ImageStudioPage = () => {
   };
 
   const handleGenerate = async () => {
+    if (!user) {
+      setShowAuthGuard(true);
+      return;
+    }
     if (isLocked) return;
     setIsGenerating(true);
     setResults([]);
@@ -408,6 +415,50 @@ const ImageStudioPage = () => {
           </div>
         </div>
         </div>
+
+        {/* Auth Guard Modal */}
+        {showAuthGuard && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4 py-6">
+            <div className="relative w-full max-w-xl rounded-[28px] border border-white/10 bg-[#001830] p-8 shadow-2xl">
+              <button
+                onClick={() => setShowAuthGuard(false)}
+                className="absolute right-4 top-4 rounded-full border border-white/20 p-2 text-[#F5F5DC] transition hover:bg-white/10"
+                aria-label={isHe ? "סגור" : "Close"}
+              >
+                <X size={18} />
+              </button>
+              <div className="flex flex-col items-center gap-4 text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/15 bg-white/5 text-[#F5F5DC]">
+                  <ImageIcon size={28} />
+                </div>
+                <h2 className="text-2xl font-semibold text-[#F5F5DC]">
+                  {isHe ? "סטודיו התמונות זמין למנויים" : "Image Studio is Available for Members"}
+                </h2>
+                <p className="max-w-md text-sm leading-7 text-[#F5F5DC]/90">
+                  {isHe
+                    ? "עדיין לא נרשמת למערכת. כדי להתחיל ליצור ולעצב תמונות עם בינה מלאכותית, יש להתחבר או ליצור חשבון."
+                    : "You haven't signed up yet. To start creating and designing images with AI, please log in or create an account."}
+                </p>
+                <div className="mt-4 flex w-full flex-col gap-3 sm:flex-row sm:justify-center">
+                  <Link
+                    to="/auth"
+                    onClick={() => setShowAuthGuard(false)}
+                    className="inline-flex w-full items-center justify-center rounded-2xl bg-[#F5F5DC] px-5 py-3 text-sm font-semibold text-[#001830] transition hover:bg-[#fbf7e5] sm:w-auto"
+                  >
+                    {isHe ? "ליצירת חשבון חדש" : "Create a New Account"}
+                  </Link>
+                  <Link
+                    to="/auth"
+                    onClick={() => setShowAuthGuard(false)}
+                    className="inline-flex w-full items-center justify-center rounded-2xl border border-[#F5F5DC]/60 bg-transparent px-5 py-3 text-sm font-semibold text-[#F5F5DC] transition hover:bg-white/10 sm:w-auto"
+                  >
+                    {isHe ? "כבר יש לי חשבון (התחברות)" : "I already have an account (Log In)"}
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Upgrade Overlay */}
         {isLocked && (

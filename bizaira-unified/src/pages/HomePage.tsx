@@ -109,46 +109,39 @@ const HomePage = () => {
                   setSelectedFeature(feature.id);
                   navigate(feature.path);
                 }}
-                // enforce exact midnight color when active and strong contrast for children
-                className={`group relative overflow-hidden rounded-2xl border border-gray-100 bg-gray-50 p-5 text-left shadow-sm transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[${DEEP_MIDNIGHT_BLUE}] ${
-                  isSelected ? "shadow-md border-transparent" : "hover:shadow-md"
+                className={`group relative overflow-hidden rounded-2xl border border-gray-100 bg-gray-50 p-5 text-left shadow-sm transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#001830] ${
+                  isSelected ? "bg-[#001830] text-white border-transparent" : "hover:bg-[#001830] hover:border-transparent"
                 }`}
-                style={{ backgroundColor: isSelected ? DEEP_MIDNIGHT_BLUE : undefined }}
               >
                 <div className="relative z-10">
                   <div
-                    // when selected: remove dark icon container and force transparent so icon sits on midnight background
-                    className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl border transition-all duration-200 ${
+                    className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl border transition-colors duration-200 ${
                       isSelected
                         ? "border-transparent bg-transparent text-white"
-                        : "border-gray-200 bg-white text-[#2D3748] group-hover:border-transparent group-hover:bg-[#001830] group-hover:text-white"
+                        : "border-gray-200 bg-white text-[#2D3748] group-hover:border-transparent group-hover:bg-transparent group-hover:text-white"
                     }`}
                   >
                     <IconComponent
                       size={24}
-                      // enforce absolute icon color on hover/active
-                      className={`transition-all duration-200 ${isSelected ? "text-white" : "text-[#2D3748] group-hover:text-white"}`}
+                      className={`transition-colors duration-200 ${isSelected ? "text-white" : "text-[#2D3748] group-hover:text-white"}`}
                     />
                   </div>
                   <h3
-                    className={`text-lg font-semibold tracking-tight transition-all duration-200 ${
+                    className={`text-lg font-semibold tracking-tight transition-colors duration-200 ${
                       isSelected ? "text-white" : "text-[#2D3748] group-hover:text-white"
                     }`}
-                    style={{ fontFamily: "Inter, system-ui, sans-serif", color: isSelected ? "#FFFFFF" : undefined }}
+                    style={{ fontFamily: "Inter, system-ui, sans-serif" }}
                   >
                     {feature.title}
                   </h3>
                   <p
-                    className={`mt-2 text-sm leading-6 transition-all duration-200 ${
+                    className={`mt-2 text-sm leading-6 transition-colors duration-200 ${
                       isSelected ? "text-white" : "text-[#2D3748] group-hover:text-white"
                     }`}
-                    style={{ color: isSelected ? "#FFFFFF" : undefined }}
                   >
                     {feature.desc}
                   </p>
                 </div>
-                {/* enforce group-hover strong override for all inner text/icons */}
-                <style>{`.group:hover .group-hover\\:text-white{color: #FFFFFF !important}`}</style>
               </button>
             );
           })}
